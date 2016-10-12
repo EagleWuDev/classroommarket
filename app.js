@@ -15,6 +15,7 @@ var User = require('./models/models').User;
 var index = require('./routes/index');
 var users = require('./routes/users');
 var auth  = require('./routes/auth');
+var register = require('./routes/register');
 
 var app = express();
 
@@ -33,11 +34,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 //setting connection
 var connect = process.env.MONGODB_URI || require('./models/connect');
 mongoose.connect(connect);
+var mongoStore = new MongoStore({mongooseConnection: mongoose.connection});
 
 //storing sessions in dB for security
 app.use(session({
     secret: process.env.SESSION_SECRET,
-    name: 'dogecoookie',
+    name: process.env.SESSION_NAME,
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
     proxy: true,
     resave: true,
@@ -63,7 +65,7 @@ passport.deserializeUser(function(id, done) {
 // passport Local strategy
 passport.use(new LocalStrategy(function(username, password, done) {
     // Find the user with the given username
-    User.findOne({ username: username }, function (err, user) {
+    User.findOne({ email: username }, function (err, user) {
       // if there's an error, finish trying to authenticate (auth failed)
       if (err) {
         console.error(err);
@@ -88,7 +90,8 @@ passport.use(new LocalStrategy(function(username, password, done) {
 // Route Setting
 // ----------------------------------------------
 
-app.use('/', auth(passport));
+app.use('/', auth(passport, mongoStore));
+app.use('/', register);
 app.use('/', index);
 app.use('/users', users);
 
