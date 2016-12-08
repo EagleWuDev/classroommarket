@@ -1,0 +1,17 @@
+.box{
+	margin-top: 5vh;
+	border: 1px solid black;
+	border-radius: 10px;
+	padding: 30px;
+}
+.join{
+	margin-top: 5vh;
+}
+.customBtn{
+	border-width: 2px;
+	font-weight: 600;
+}
+.customBtn:hover{
+	color: black;
+	border-color: black;
+}

@@ -1,0 +1,53 @@
+.header{
+	width: 100vw;
+	height: 25vh;
+	background: linear-gradient(-90deg, #373837, #5a5c5a);
+}
+h1{
+	color: #FFF;
+	margin-top: 10vh;
+}
+.main{
+	background-color: #F5F7FA;
+}
+.container{
+	display: flex;
+}
+.left-side{
+	background-color: #FFF;
+	height: 20vh;
+	margin: 1vh;
+	border-radius: 10px;
+	border: 1px solid #E0E0E0;
+	flex: 1;
+}
+h5{
+	margin-left: 1.3vw;
+	margin-top: 2vh;
+	font-size: 1.5em;
+	font-weight: 500;
+}
+.active-class{
+	font-size: 3em;
+}
+
+.right-side{
+	background-color: #FFF;
+	margin: 1vh;
+	height: 30vh;
+	border-radius: 10px;
+	border: 1px solid #E0E0E0;
+	flex: 2;
+}
+.noClass{
+	margin-top: 10vh;
+	text-align: center;
+	color: #373837;
+	margin-left: 0;
+}
+.createClass{
+	background-color: #FFF;
+	border: 1px solid black;
+	padding: 10px;
+	border-radius: 10px;
+}

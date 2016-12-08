@@ -1,8 +1,27 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-
-a {
-  color: #00B7FF;
+.customBtn{
+	background: none;
+	border: 1px solid;
+	border-radius: 10px;
+	padding: 10px;
+	font-size: 1.3em;
+}
+.greenBtn{
+	border-color: #006400;
+	color: #006400;
+}
+.greenBtn:hover{
+	color: #FFF;
+}
+.redBtn{
+	border-color: #8B0000;
+	color: #8B0000;
+}
+.redBtn:hover{
+	color: #FFF;
+}
+.clear{
+	clear: both;
 }

@@ -1,0 +1,28 @@
+.background{
+	background-image: url('/images/markets.jpeg');
+	height: 100vh;
+	width: 100vw;
+	background-size: cover;
+}
+
+.overlay{
+	background: rgba(0,0,0,.8);
+	height: 100vh;
+	width: 100vw;
+}
+.title{
+	margin-top: 35vh;
+	color: #FFF;
+}
+h1{
+	font-size: 3em;
+	font-weight: 400;
+}
+h2{
+	font-size: 2.5em;
+	font-weight: 400;
+}
+.greenBtn{
+	margin-top: 2vh;
+	margin-bottom: 2vh;
+}

@@ -1,0 +1,69 @@
+<link rel="stylesheet" type="text/css" href="/stylesheets/home.css"/>
+<link rel="stylesheet" type="text/css" href="/stylesheets/class.css">
+{{#if error}}
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+      {{error}}
+    </div>
+{{/if}}
+
+<div class="header">
+	<div class="container">
+		<div class="col-md-12">
+			<h1>Class {{name}}</h1>
+			<h3>At {{college}}</h3>
+		</div>
+	</div>
+</div>
+
+<div class="main">
+	<div class="container">
+		<div class="col-md-12">
+		<center>
+		<h2>You Have No Assignments</h2>
+		<button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal">Add Assignment</button>
+		</center>
+		</div>
+	</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Create Assignment</h4>
+      </div>
+      <div class="modal-body">
+        <form method="POST">
+        <div class="form-group">
+        	<label>Name</label>
+        	<input type="text" name="assignName" class="form-control">
+        </div>
+
+        <div class="form-group">
+        	<label>Due Date</label>
+        	<input type="Date" name="assignDate" class="form-control">
+        </div>
+
+        <div class="form-group">
+        	<label>Add Class Days</label>
+        	<p>Enter in the Number of Class Days to be Associated with this Assignment</p>
+        	<input type="Number" name="assignDays" class="form-control">
+        </div>
+
+        <div class="form-group">
+        	<label>Assignment Weight (Out of 1)</label>
+        	<input type="Number" step="0.01" class="form-control" name="assignWeight">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Create Assignment</button>
+      	</form>
+      </div>
+    </div>
+  </div>
+</div>

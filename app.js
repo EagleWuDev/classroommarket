@@ -13,7 +13,6 @@ var User = require('./models/models').User;
 
 //define route paths
 var index = require('./routes/index');
-var users = require('./routes/users');
 var auth  = require('./routes/auth');
 var register = require('./routes/register');
 
@@ -93,7 +92,6 @@ passport.use(new LocalStrategy(function(username, password, done) {
 app.use('/', auth(passport, mongoStore));
 app.use('/', register);
 app.use('/', index);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

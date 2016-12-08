@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="stylesheets/loginregister.css"/>
+
 {{#if error}}
     <div class="alert alert-danger" role="alert">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -5,28 +7,55 @@
       {{error}}
     </div>
 {{/if}}
-<form method="POST" style="max-width: 300px; margin: auto; margin-top: 50px; border: 0.5px solid gray; padding: 30px 30px 30px 30px">
-    <h3>Register</h3>
-    <div class="form-group">
-        <label>Name</label>
-        <input type="text" name="username" value="{{data.username}}" class="form-control">
+
+<div class="container"> 
+    <div class="row">
+    <center>
+    <h1 class="join">Join ClassroomMarket</h1>
+    </center>
+        <div class="col-md-12 box">
+         <form method = "POST">
+         <h3>Register Here</h3>
+         <div class="form-group">
+            <label>Name</label>
+            <input type="text" name="username" value="{{data.username}}" class="form-control" required="true">
+         </div>
+
+        <div class="form-group">
+         <label>Profession</label>
+         <select class="form-control" required="true" name="profession">
+            <option>Student</option>
+            <option>Professor</option>
+         </select>
+         </div>
+
+         <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" name="email" value="{{data.email}}" class="form-control" required="true">
+         </div>
+
+
+         <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" class="form-control" required="true">
+         </div>
+
+         <div class="form-group">
+            <label>Verify Password</label>
+            <input type="password" name="passwordRepeat" class="form-control" required="true">
+         </div>
+
+        <div class="form-group">
+            <p>
+            <button class="customBtn redBtn">Register</button>
+            <a href="/login"><button class="greenBtn customBtn">Go To Login</button></a>
+         </p>
+            </div>
+         </form>
+        </div>
+
     </div>
-    <div class="form-group">
-        <label>Email address</label>
-        <input type="text" name="email" value="{{data.email}}" class="form-control">
-    </div>
-    <div class="form-group">
-        <label>Password</label>
-        <input type="password" name="password" class="form-control">
-    </div>
-    <div class="form-group">
-        <label>Verify Password</label>
-        <input type="password" name="passwordRepeat" class="form-control">
-    </div>
-    <div class="form-group">
-        <p>
-          <button class="btn btn-success">Register</button>
-          <a href="/login" class="btn btn-primary">Go To Login</a>
-        </p>
-    </div>
-</form>
+</div>
+
+
+
