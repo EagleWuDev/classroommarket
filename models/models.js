@@ -84,11 +84,11 @@ var transactionSchema = mongoose.Schema({
 var classRoomAssignmentSchema = mongoose.Schema({
 	classRoom: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'classRoom'
+		ref: 'ClassRoom'
 	},
 	assignment: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'assignment'
+		ref: 'Assignment'
 	}
 })
 
@@ -110,10 +110,6 @@ var assignmentSchema = mongoose.Schema({
 		type: Number
 	}
 })
-
-
-
-
 module.exports = {
 	User: mongoose.model('User', userSchema),
 	ClassRoom: mongoose.model('classRoom', classRoomSchema),

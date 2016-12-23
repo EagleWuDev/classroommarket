@@ -11,7 +11,7 @@
 <div class="header">
 	<div class="container">
 		<div class="col-md-12">
-			<h1>Class {{name}}</h1>
+			<h1>{{name}}</h1>
 			<h3>At {{college}}</h3>
 		</div>
 	</div>
@@ -20,10 +20,50 @@
 <div class="main">
 	<div class="container">
 		<div class="col-md-12">
+    <h1 class="secondTitle">Assignments</h1>
+    {{#if assignments}}
+
+    {{#each assignments}}
+    <div class="col-md-4">
+    <center>
+      <div class="assignmentBox">
+        <center>
+         <h3>{{assignment.assignment.name}}</h3>
+         <h4>Due Date: {{assignment.assignment.expireAt}}</h4>
+         <h5>Weight: {{assignment.assignment.weight}}</h5>
+         {{#if assignment.assignment.active}}
+          <h6 class="active">Active</h6>
+          <button data-toggle="collapse" data-target="#day{{assignment._id}}"><h6>Click Here to Update Days</h6></button>
+
+          <div id="day{{assignment._id}}" class="collapse">
+            {{#each days}}
+            <h6>{{number}}</h6>
+            <h6>{{extracredit}}</h6>
+
+            {{/each}}
+          </div>
+         {{else}}
+          <h6>Not Active</h6>
+          <a href="/assignments/{{assignment._id}}"><h6>Price</h6></a>
+         {{/if}}
+         </center>
+            
+      </div>
+      </center>
+    </div>
+
+    {{/each}}
+    <div class="clear"></div>
+    <center>
+        <button class="btn btn-default assignmentAdd" type="button" data-toggle="modal" data-target="#myModal">Add Assignment</button>
+    </center>
+    {{else}}
 		<center>
 		<h2>You Have No Assignments</h2>
 		<button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal">Add Assignment</button>
 		</center>
+
+    {{/if}}
 		</div>
 	</div>
 </div>

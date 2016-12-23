@@ -12,7 +12,7 @@
 	<div class="container">
 		<div class="col-md-12">
 			<h1>Welcome Professor {{name}}</h1>
-			<h3>You Have 0 Active Classes</h3>
+			<h3>You Have {{activeNum}} Active Classes</h3>
 		</div>
 	</div>
 </div>
@@ -22,17 +22,34 @@
 		<div class="left-side">
 		<h5>Active Classes</h5>
 		<center>
-		<h3 class="active-class">0</h3>
-
+		<h3 class="active-class">{{activeNum}}</h3>
 		</center>
 
 		</div>
 		<div class="right-side">
 		<h5>Class History</h5>
+		{{#if classRoom}}
+		{{#each classRoom}}
+		<center>
+			<a href="/classRoom/{{_id}}">
+			<div class="classBox">
+			<center>
+				<h3>{{name}}</h3>
+				<h4>{{college}}</h4>
+			</center>
+			</div>
+			</a>
+		</center>
+		{{/each}}
+		<center>
+		<button type="button" style="margin-top: 3vh;" data-toggle="modal" data-target="#myModal" class="createClass">Create a Class</button>
+		</center>
+		{{else}}
 		<center>
 			<h5 class="noClass">You Have No Classes</h5>
 			<button type="button" data-toggle="modal" data-target="#myModal" class="createClass">Create a Class</button>
 		</center>
+		{{/if}}
 			<!-- Modal -->
 			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 			  <div class="modal-dialog" role="document">

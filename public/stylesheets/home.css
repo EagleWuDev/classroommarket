@@ -51,3 +51,13 @@ h5{
 	padding: 10px;
 	border-radius: 10px;
 }
+.classBox{
+	width: 90%;
+	height: auto;
+	border: 1px solid black;
+	border-radius: 10px;
+	padding: 10px;
+}
+a:hover{
+	text-decoration: none;
+}

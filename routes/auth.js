@@ -45,7 +45,7 @@ module.exports = function(passport, mongoStore) {
   }, restoreSession, function(req, res) {
     // Successful authentication, redirect home.
     console.log('in next part');
-    res.redirect('/');
+    res.redirect('/home');
   });
 
   // GET Logout page

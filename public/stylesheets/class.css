@@ -1,6 +1,43 @@
 .main{
-	height: 30vh;
+	min-height: 30vh;
+	height: auto;
+	padding-bottom: 10vh;
 }
 h2{
 	margin-top: 10vh;
+}
+button{
+	background: none !important;
+	border: 1px solid grey !important;
+	color: black !important;
+}
+.assignmentBox{
+	border: 1px solid #E0E0E0;
+	width: 90%;
+	margin-top: 1.8vh;
+	background-color: #FFF;
+	border-radius: 10px;
+	padding: 10px;
+
+}
+.assignmentBox h3{
+	font-size: 2em;
+}
+.assignmentBox h4{
+	color: #696969;
+}
+.assignmentBox h5{
+	margin-left: 0 !important;
+	padding: none;
+}
+.assignmentBox .active{
+	font-size: 1.4em;
+}
+.secondTitle{
+	color: #696969 !important;
+	margin-top: 1vh !important;
+}
+.assignmentAdd{
+	margin-top: 4vh;
+
 }
