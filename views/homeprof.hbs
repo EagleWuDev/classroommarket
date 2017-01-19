@@ -13,6 +13,7 @@
 		<div class="col-md-12">
 			<h1>Welcome Professor {{name}}</h1>
 			<h3>You Have {{activeNum}} Active Classes</h3>
+			<a href="/logout"><h5>Logout</h5></a>
 		</div>
 	</div>
 </div>
@@ -20,14 +21,14 @@
 <div class="main">
 	<div class="container">
 		<div class="left-side">
-		<h5>Active Classes</h5>
+		<h5 class="margin">Active Classes</h5>
 		<center>
 		<h3 class="active-class">{{activeNum}}</h3>
 		</center>
 
 		</div>
 		<div class="right-side">
-		<h5>Class History</h5>
+		<h5 class="margin">Class History</h5>
 		{{#if classRoom}}
 		{{#each classRoom}}
 		<center>

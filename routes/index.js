@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/models').User;
-var ClassroomUser = require('../models/models').ClassroomUser;
+var ClassRoomUser = require('../models/models').ClassRoomUser;
 var ClassRoom = require('../models/models').ClassRoom;
 var Assignment = require('../models/models').Assignment;
 var ClassRoomAssignment = require('../models/models').ClassRoomAssignment;
@@ -29,20 +29,23 @@ router.use(function(req, res, next){
 
 router.get('/home', function(req, res, next){
 	User.findById(req.user.id, function(err, user){
+
+		if (user.professor){
 		ClassRoom.find({"owner": req.user.id}).sort('createdAt').exec(function(error, classRoom){
 			console.log("classrooms", classRoom)
-				if (user.professor){
 					lastname = user.username.split(' ').slice(-1).join(' ');
 						res.render('homeprof', {
 							name: lastname,
 							activeNum: classRoom.length,
 							classRoom: classRoom
 						})
-					
-				} else {
-					res.render('homestu')
-				}
-		})
+					})	
+		} else {
+			console.log(user)
+			res.render('homestu', {
+				name: user.username
+			})
+		}
 	})
 })
 
@@ -62,18 +65,17 @@ router.post('/home', function(req, res, next){
 })
 
 router.get('/classRoom/:id', function(req, res, next){
-
 	ClassRoom.findById(req.params.id).exec(function(error, classRoom){
+
+	if(classRoom.owner + "" === req.user.id + "") {
 		ClassRoomAssignment.find({"classRoom":req.params.id}).populate('assignment').sort('assignment.expireAt').lean().exec(function(err, assignments){
 
 			var assignmentRet = [];
 
 			var asyncCall = new Promise(function(resolve, reject){
 				assignments.forEach(function(item, index){
-				console.log('in foreach')
+
 					Day.find({'assignment': item.assignment._id}).sort("number").lean().exec(function(err2, days){
-							console.log("days",days);
-							console.log('in find')
 							assignmentRet.push({assignment: item, days: days})
 						if(index === assignments.length-1){
 							resolve(assignmentRet)
@@ -84,7 +86,6 @@ router.get('/classRoom/:id', function(req, res, next){
 
 			asyncCall.then(function(assignmentRet){
 				if(classRoom.owner + "" === req.user.id + ""){
-					console.log("assignmentRet", assignmentRet);
 					console.log("assignmentRet1stassignment", assignmentRet[0].assignment.assignment);
 
 						assignmentRet.sort(function(a,b){
@@ -101,7 +102,37 @@ router.get('/classRoom/:id', function(req, res, next){
 				}
 			})
 		})
+	} else {
+
+	ClassRoomUser.find({'user' : req.user.id, 'classRoom' : req.params.id}).exec(function(error, classroomUser){
+		console.log(classroomUser);
+		ClassRoomAssignment.find({"classRoom": req.params.id}).populate('assignment').sort('assignment.expireAt').lean().exec(function(err, assignments){
+		
+			if(classroomUser.length > 0){
+				
+				res.render('classroomstujoin', {
+					name: classRoom.name,
+					college: classRoom.college,
+					assignments: assignments,
+					classId: classRoom._id
+				})
+			} else {
+				
+				console.log(assignments);
+
+						res.render('classroomstuNew', {
+							name: classRoom.name,
+							id: classRoom._id,
+							college: classRoom.college,
+							assignments: assignments
+						});
+
+		    	
+		}
 	})
+	})
+	}
+   })
 })
 
 router.post('/classRoom/:id', function(req, res, next){
@@ -143,6 +174,40 @@ router.post('/classRoom/:id', function(req, res, next){
 
 })
 
+router.get('/join/:id', function(req, res, next) {
+	var cRU = new ClassRoomUser({
+		user: req.user.id,
+		classRoom: req.params.id
+	})
 
+	cRU.save(function(errpr, classRoomUser){
+		res.redirect('/classroom/' + req.params.id);
+	})
+})
+
+router.get('/day/:id', function(req, res, next){
+
+	Day.findById(req.params.id).populate('assignment classRoom').lean().exec(function(error, day){
+		ClassRoomUser.find({'classRoom' : day.classRoom}).populate('user').lean().exec(function(err, classRoomUser){
+			
+			console.log(day);
+			console.log(classRoomUser);
+
+			res.render('day', {
+				name: day.classRoom.name,
+				college: day.classRoom.college,
+				classRoomId: day.classRoom._id,
+				assignment: day.assignment.name,
+				assignmentId: day.assignment._id,
+				number: day.number,
+				day: day._id,
+				classRoomUser: classRoomUser
+			})
+
+
+		})
+
+	})
+})
 
 module.exports = router;

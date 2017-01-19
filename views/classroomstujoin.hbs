@@ -1,0 +1,97 @@
+<link rel="stylesheet" type="text/css" href="/stylesheets/home.css"/>
+<link rel="stylesheet" type="text/css" href="/stylesheets/class.css">
+<script type="text/javascript" src="/javascripts/purchase.js"></script>
+{{#if error}}
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+      {{error}}
+    </div>
+{{/if}}
+
+<div class="header">
+	<div class="container">
+		<div class="col-md-12">
+			<h1 id="className" classId="{{classId}}" >{{name}}</h1>
+			<h3>At {{college}}</h3>
+      <a href="/home"><h5>Go Home</h5></a>
+		</div>
+	</div>
+</div>
+
+<div class="main">
+	<div class="container">
+		<div class="col-md-12">
+    <h1 class="secondTitle">Assignments</h1>
+    {{#if assignments}}
+
+
+    <div class="panel-group" id="accordian">
+
+    {{#each assignments}}
+
+
+    <center>
+      <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordian" href="#collapse{{assignment._id}}">{{assignment.name}}</a>
+          </h4>
+      </div>
+
+      <div id="collapse{{assignment._id}}" class="panel-collapse collapse">
+      <div class="panel-body">
+        <h3>{{assignment.name}}</h3>
+         <h4>Due Date: {{assignment.expireAt}}</h4>
+         <h5>Weight: {{assignment.weight}}</h5>
+         <h5>ExtraCredit in Circulation: {{assignment.extraCredit}}</h5>
+         {{#if assignment.active}}
+          <h6 class="active">Active</h6>
+            <div>
+            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal{{assignment._id}}">Buy Extracredit</button>
+
+              <!-- Modal -->
+              <div class="modal fade" id="modal{{assignment._id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      <h4 class="modal-title" id="myModalLabel">Make a Purchase</h4>
+                      <h4 class="modal-title" id="myModalLabel">{{assignment.name}}</h4>
+                    </div>
+                    <div class="modal-body">
+                      <input type="number" id="value{{assignment._id}}" /> G R O N K S
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      <button type="button" assignId={{assignment._id}} class="btn btn-primary purchase">Save changes</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+           
+            </div>
+         {{else}}
+          <h6>Not Active</h6>
+          <a href="/assignments/{{assignment._id}}"><h6>Price</h6></a>
+
+         {{/if}}
+      </div>
+      </div>  
+      </div>
+      </center>
+    {{/each}}
+
+    </div>
+
+   
+    {{else}}
+		<center>
+		<h2>There are No Assignments</h2>
+		</center>
+
+    {{/if}}
+		</div>
+	</div>
+</div>
+

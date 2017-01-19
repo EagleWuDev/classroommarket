@@ -13,6 +13,7 @@
 		<div class="col-md-12">
 			<h1>{{name}}</h1>
 			<h3>At {{college}}</h3>
+      <a href="/home"><h5>Go Home</h5></a>
 		</div>
 	</div>
 </div>
@@ -23,40 +24,66 @@
     <h1 class="secondTitle">Assignments</h1>
     {{#if assignments}}
 
+
+    <div class="panel-group" id="accordian">
+
     {{#each assignments}}
-    <div class="col-md-4">
+
+
     <center>
-      <div class="assignmentBox">
-        <center>
-         <h3>{{assignment.assignment.name}}</h3>
+      <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordian" href="#collapse{{assignment._id}}">{{assignment.assignment.name}}</a>
+          </h4>
+      </div>
+
+      <div id="collapse{{assignment._id}}" class="panel-collapse collapse">
+      <div class="panel-body">
+        <h3>{{assignment.assignment.name}}</h3>
          <h4>Due Date: {{assignment.assignment.expireAt}}</h4>
          <h5>Weight: {{assignment.assignment.weight}}</h5>
+         <h5>ExtraCredit in Circulation: {{assignment.assignment.extraCredit}}</h5>
          {{#if assignment.assignment.active}}
           <h6 class="active">Active</h6>
-          <button data-toggle="collapse" data-target="#day{{assignment._id}}"><h6>Click Here to Update Days</h6></button>
-
-          <div id="day{{assignment._id}}" class="collapse">
+             <div>
+             <hr>
+             <h4>Add Gronks</h4>
+             <center>
             {{#each days}}
-            <h6>{{number}}</h6>
-            <h6>{{extracredit}}</h6>
+         
+            <div class="gronk">
+            {{#if active}}
+            <a href="/day/{{_id}}"><h5>Day: {{number}}</h5></a>
+            
+            {{else}}
+            <h5>Day: {{number}}</h5>
+            <h6>{{extraCredit}} Gronks Generated</h6>
 
+            </div>
+           
+
+            {{/if}}
+          
             {{/each}}
-          </div>
+            </center>
+      </div>
          {{else}}
           <h6>Not Active</h6>
           <a href="/assignments/{{assignment._id}}"><h6>Price</h6></a>
+
          {{/if}}
-         </center>
-            
+      </div>
+      </div>  
       </div>
       </center>
-    </div>
-
     {{/each}}
-    <div class="clear"></div>
+
+    </div>
     <center>
         <button class="btn btn-default assignmentAdd" type="button" data-toggle="modal" data-target="#myModal">Add Assignment</button>
     </center>
+
     {{else}}
 		<center>
 		<h2>You Have No Assignments</h2>

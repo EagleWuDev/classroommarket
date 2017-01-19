@@ -28,6 +28,8 @@ var classRoomSchema = mongoose.Schema({
 	college: String
 })
 
+classRoomSchema.index({name: 'text'})
+
 var classRoomUserSchema = mongoose.Schema({
 	user: {
 		type: mongoose.Schema.Types.ObjectId,
@@ -71,6 +73,10 @@ var transactionSchema = mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Assignment'
 	},
+	classRoom: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'ClassRoom'
+	},
 	spent: {
 		type: Number,
 		default: 0
@@ -78,6 +84,10 @@ var transactionSchema = mongoose.Schema({
 	extraCreditReceived: {
 		type: Number,
 		default: 0
+	},
+	updated: {
+		type: Boolean,
+		default: false
 	}
 })
 
@@ -108,11 +118,15 @@ var assignmentSchema = mongoose.Schema({
 	active: Boolean,
 	weight: {
 		type: Number
+	},
+	extraCredit: {
+		type: Number,
+		default: 0
 	}
 })
 module.exports = {
 	User: mongoose.model('User', userSchema),
-	ClassRoom: mongoose.model('classRoom', classRoomSchema),
+	ClassRoom: mongoose.model('ClassRoom', classRoomSchema),
 	Day: mongoose.model('Day', daySchema),
 	Assignment: mongoose.model('Assignment', assignmentSchema),
 	ClassRoomUser: mongoose.model('ClassRoomUser', classRoomUserSchema),

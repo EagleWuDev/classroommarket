@@ -1,6 +1,6 @@
 .header{
 	width: 100vw;
-	height: 25vh;
+	height: 30vh;
 	background: linear-gradient(-90deg, #373837, #5a5c5a);
 }
 h1{
@@ -22,10 +22,12 @@ h1{
 	flex: 1;
 }
 h5{
-	margin-left: 1.3vw;
 	margin-top: 2vh;
 	font-size: 1.5em;
 	font-weight: 500;
+}
+.margin{
+	margin-left: 1.3vw;
 }
 .active-class{
 	font-size: 3em;
@@ -61,3 +63,8 @@ h5{
 a:hover{
 	text-decoration: none;
 }
+.active{
+	font-size: 1.3em;
+	color: red;
+}
+
