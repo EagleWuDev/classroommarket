@@ -1,5 +1,6 @@
 <link rel="stylesheet" type="text/css" href="/stylesheets/home.css"/>
-<link rel="stylesheet" type="text/css" href="/stylesheets/class.css">
+<link rel="stylesheet" type="text/css" href="/stylesheets/class.css"/>
+<script type="text/javascript" src="/javascripts/endMan.js"></script>
 {{#if error}}
     <div class="alert alert-danger" role="alert">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -21,7 +22,7 @@
 <div class="main">
 	<div class="container">
 		<div class="col-md-12">
-    <h1 class="secondTitle">Assignments</h1>
+    <h1 class="secondTitle" id="class" classId = "{{classId}}">Assignments</h1>
     {{#if assignments}}
 
 
@@ -46,6 +47,8 @@
          <h5>ExtraCredit in Circulation: {{assignment.assignment.extraCredit}}</h5>
          {{#if assignment.assignment.active}}
           <h6 class="active">Active</h6>
+          <button class="end_assignment" assignId="{{assignment.assignment._id}}" >End Assignment Manually</button>
+
              <div>
              <hr>
              <h4>Add Gronks</h4>

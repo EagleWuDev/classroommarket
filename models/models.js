@@ -24,11 +24,13 @@ var classRoomSchema = mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
 	}, 
+	professor: String,
 	createdAt: Date,
 	college: String
 })
 
-classRoomSchema.index({name: 'text'})
+classRoomSchema.index({name: 'text', professor: 'text', college: 'text'},
+		{"weights": {name: 10, professor: 5, college: 2}})
 
 var classRoomUserSchema = mongoose.Schema({
 	user: {
@@ -85,6 +87,10 @@ var transactionSchema = mongoose.Schema({
 		type: Number,
 		default: 0
 	},
+	weightedCreditReceived: {
+		type: Number,
+		default: 0
+	},
 	updated: {
 		type: Boolean,
 		default: false
@@ -110,6 +116,9 @@ var assignmentSchema = mongoose.Schema({
 		type: Date
 	},
 	price: {
+		type: Number
+	},
+	weightedPrice: {
 		type: Number
 	},
 	inflation: {

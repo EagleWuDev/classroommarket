@@ -67,4 +67,14 @@ a:hover{
 	font-size: 1.3em;
 	color: red;
 }
+.classRoom{
+	width: 90%;
+	background: none;
+	padding: 20px;
+	border: 1px solid #000000;
+	border-radius: 10px;
+	margin: 20px;
+
+}
+
 

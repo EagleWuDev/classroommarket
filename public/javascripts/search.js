@@ -25,11 +25,13 @@ var render = function(data) {
 	$('.results').empty();
 
 	data.forEach(function(item, index){
-		var start = $('<div></div>')
-		var wrapper = $('<div><a href = "/classRoom/' + item._id + '">' + item.name + '</a></div>');
-		var more = $('<div>' + item.college + '</div>');
+		var start = $('<div class="col-md-4"></div>')
+		var wrapper = $('<div class="classRoom" ><a href = "/classRoom/' + item._id + '"><h5>' + item.name + '</h5></a></div>');
+		var college = $('<h6>' + item.college + '</h6>');
+		var professor = $('<h6>' + item.professor + '</h6>');
 
-		wrapper.append(more);
+		wrapper.append(college);
+		wrapper.append(professor);
 		start.append(wrapper);
 
 		start.html();

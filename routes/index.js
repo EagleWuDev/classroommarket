@@ -42,39 +42,63 @@ router.get('/home', function(req, res, next){
 					})	
 		} else {
 			console.log(user)
-			res.render('homestu', {
-				name: user.username
+			ClassRoomUser.find({user: req.user.id}).populate('classRoom').lean().exec(function(error, classRoomUser){
+
+					console.log('classRoomUsers', classRoomUser)
+					res.render('homestu', {
+						name: user.username,
+						classRoomUser: classRoomUser,
+						activeNum: classRoomUser.length
+					})
+
+
+
 			})
 		}
 	})
 })
 
 router.post('/home', function(req, res, next){
-	var classRoom = new ClassRoom({
-		name: req.body.className,
-		college: req.body.collegeName,
-		owner: req.user.id,
-		createdAt: new Date()
-	})
 
-	classRoom.save(function(error, classRoom){
-		error ? console.log("error", error) : null;
+	User.findById(req.user.id).lean().exec(function(error, user){
 
-		res.redirect('/classRoom/' + classRoom._id);
+		var classRoom = new ClassRoom({
+			name: req.body.className,
+			college: req.body.collegeName,
+			owner: req.user.id,
+			professor: user.username,
+			createdAt: new Date()
+		})
+
+		classRoom.save(function(error, classRoom){
+			console.log('save');
+			console.log(classRoom);
+			res.redirect('/classRoom/' + classRoom._id);
+		})
+
 	})
 })
 
 router.get('/classRoom/:id', function(req, res, next){
+	console.log(req.user.id)
 	ClassRoom.findById(req.params.id).exec(function(error, classRoom){
 
 	if(classRoom.owner + "" === req.user.id + "") {
+		console.log('in here');
 		ClassRoomAssignment.find({"classRoom":req.params.id}).populate('assignment').sort('assignment.expireAt').lean().exec(function(err, assignments){
 
+			console.log('assignments', assignments)
 			var assignmentRet = [];
 
 			var asyncCall = new Promise(function(resolve, reject){
-				assignments.forEach(function(item, index){
 
+				if(assignments.length === 0) {
+					resolve(assignmentRet);
+				} else {
+
+
+				assignments.forEach(function(item, index){
+					console.log(item);
 					Day.find({'assignment': item.assignment._id}).sort("number").lean().exec(function(err2, days){
 							assignmentRet.push({assignment: item, days: days})
 						if(index === assignments.length-1){
@@ -82,23 +106,31 @@ router.get('/classRoom/:id', function(req, res, next){
 						}	
 					})
 				})
+				}
 			})
 
 			asyncCall.then(function(assignmentRet){
+
+				console.log('assignment')
 				if(classRoom.owner + "" === req.user.id + ""){
-					console.log("assignmentRet1stassignment", assignmentRet[0].assignment.assignment);
+
+					console.log("assignmentRet1stassignment");
 
 						assignmentRet.sort(function(a,b){
 							return new Date(a.assignment.assignment.expireAt) - new Date(b.assignment.assignment.expireAt)
 						})
 
 						console.log('sorted array', assignmentRet);
+						console.log(classRoom._id)
 
 						res.render('classroom', {
 						name: classRoom.name,
 						college: classRoom.college,
+						classId: classRoom._id,
 						assignments: assignmentRet
 					})
+				} else {
+					res.send('fuckkkkk')
 				}
 			})
 		})

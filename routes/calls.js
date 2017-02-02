@@ -3,13 +3,16 @@ var router = express.Router();
 var mongoose = require('mongoose')
 var ClassRoom = require('../models/models').ClassRoom;
 var ClassRoomUser = require('../models/models').ClassRoomUser;
+var ClassRoomAssignment = require('../models/models').ClassRoomAssignment;
 var Day = require('../models/models').Day;
 var Assignment = require('../models/models').Assignment;
 var Transaction = require('../models/models').Transaction;
 
 router.get('/search', function(req, res, next){
 	
-	ClassRoom.find({$text : {$search: req.headers.search}}).exec(function(err, results){
+	ClassRoom.find({$text : {$search: req.headers.search}}, {score: {'$meta': 'textScore'}}).sort({score: {'$meta': "textScore"}}).exec(function(err, results){
+
+		console.log(results)
 
 		err? console.log(err) : null
 
@@ -112,6 +115,80 @@ router.post('/transaction', function(req, res, next){
 			res.json({'success': false, 'message': 'Insufficient Funds'})
 
 		}
+
+	})
+})
+
+router.post('/calculatePrice', function(req, res, next){
+
+	ClassRoom.findById(mongoose.Types.ObjectId(req.body.classId)).lean().exec(function(error, classRoom){
+
+		if(classRoom.owner + "" !== req.user.id + "") {
+			res.json({'success': false, 'message': 'nice try buddy, but not today'});
+		} else {
+			
+			Transaction.find({assignment: mongoose.Types.ObjectId(req.body.assignId)}).lean().exec(function(err, transactions) {
+
+				var total = 0;
+
+				console.log(transactions);
+
+				transactions.forEach(function(item, index) {
+					total+=item.spent;
+				})
+
+				console.log(total);
+
+
+				Assignment.findById(mongoose.Types.ObjectId(req.body.assignId)).exec(function(error, assignment){
+
+					var price = total/assignment.extraCredit;
+					var weighted = price/assignment.weight;
+
+					assignment.price = price;
+					assignment.weightedPrice = weighted;
+					assignment.active = false;
+
+					ClassRoomAssignment.find({classRoom: mongoose.Types.ObjectId(req.body.classId)}).populate('assignment').sort('assignment.expireAt').lean().exec(function(error, classRoomAssignments){
+
+						for(var i = 0; i < classRoomAssignments.length; i++){
+							if(classRoomAssignments[i].assignment._id + "" === req.body.assignId) {
+								console.log('assignment match found');
+
+								if(i === 0) {
+									assignment.inflation = 0;
+									break;
+								} else {
+									assignment.inflation = weighted/classRoomAssignments[i-1].assignment.weightedPrice;
+									break;
+								}
+							}
+						}
+
+						assignment.save(function(error, update){
+							error ? console.log(error) : console.log(update)
+
+							transactions.forEach(function(item, index){
+								var extraCreditReceived = item.spent/price;
+								var weightedCreditReceived = item.spent/weighted;
+								Transaction.findByIdAndUpdate(item._id, {extraCreditReceived: extraCreditReceived, weightedCreditReceived: weightedCreditReceived}, {new: true}).exec(function(error, transaction){
+									console.log('transaction updated')
+								})
+							})
+
+								res.json({'success': true, 'message': 'assignment ended'});
+
+						});
+
+
+					})
+				})
+
+			}) 
+
+
+		}
+
 
 	})
 })

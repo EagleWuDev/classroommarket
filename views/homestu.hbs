@@ -20,12 +20,42 @@
 </div>
 
 
-<center>
-	<h5>You're not in Any Classes! Join One Now</h5>
 
+
+	{{#if classRoomUser}}
+	<div class="container">
+		<div class="col-md-12">
+			<h3>Your Classes</h3>
+
+			{{#each classRoomUser}}
+			<div class="col-md-4">
+				<center>
+				<div class="classRoom">
+					<h5><a href="/classRoom/{{classRoom._id}}">{{classRoom.name}}</a></h5>
+					<h6>{{classRoom.college}}</h6>
+					<h6>Professor</h6>
+					<h6>{{classRoom.professor}}</h6>
+				</div>
+				</center>
+			</div>
+			{{/each}}
+		</div>
+
+	</div>
+	<center>
+	<h5>Search Classes</h5>
+	<input type="text" name="search" id = "search" placeholder="Search Classes">
+
+	{{else}}
+	<h5>You're not in Any Classes! Join One Now</h5>
 	<input type="text" name="search" id = "search" placeholder="Search Classes">
 	
-</center>
+
+	{{/if}}
 	
-	<div class="results"></div>
+	
+	</center>
+	<hr>
+	<div class="container">
+	<div class="results col-md-12"></div></div>
 
