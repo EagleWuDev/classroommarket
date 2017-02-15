@@ -39,7 +39,7 @@ router.post('/addGronks', function(req, res, next){
 						var count = 0;
 						data.forEach(function(item, index){
 
-							var num = parseInt(item[1]);
+							var num = parseInt(item[1]) * day.wage;
 							count+=num;
 							ClassRoomUser.findOneAndUpdate({user: mongoose.Types.ObjectId(item[0]), classRoom: classId}, {$inc:{gronks:num}}, {new: true}).exec(function(error, response){
 									console.log(count)
@@ -191,6 +191,79 @@ router.post('/calculatePrice', function(req, res, next){
 
 
 	})
+})
+
+
+router.post('/findLatestDay', function(req, res, next){
+
+		classId = mongoose.Types.ObjectId(req.body.classId);
+		assignId = mongoose.Types.ObjectId(req.body.id);
+		console.log(req.body, "req.body");
+
+		ClassRoom.findById(classId).lean().exec(function(error, classRoom){
+
+			if(classRoom.owner + "" !== req.user.id + ""){
+				res.json({'success': false, 'message' : 'you do not own this class'});
+			}
+
+			else {
+				Assignment.findById(assignId).lean().exec(function(error1, assign){
+					console.log(assign.lastDay);
+					res.json({'success': true, 'data' : assign.lastDay});
+
+				})
+			}
+
+
+		})
+
+})
+
+router.post('/classRoom/:id', function(req, res, next){
+
+	console.log(req.body, 'req.body');
+
+	var wages = JSON.parse(req.body.wages);
+
+	var lastDay = parseInt(wages[wages.length-1][0])+1;
+
+	var assign = new Assignment({
+		name: req.body.assignName,
+		expireAt: req.body.assignDate,
+		active: true,
+		weight: req.body.assignWeight,
+		lastDay: lastDay
+	})
+
+	assign.save(function(error, assign){
+		error ? console.log(error) : null
+
+		var classRoomAssign = new ClassRoomAssignment({
+			classRoom: req.params.id,
+			assignment: assign._id
+		})
+
+		classRoomAssign.save(function(error, cRA){
+			error ? console.log(error) : null
+
+			wages.forEach(function(item, index){
+				var day = new Day({
+					classRoom: req.params.id,
+					assignment: assign._id,
+					number: item[0],
+					active: true,
+					wage: item[1]
+				})
+
+				day.save(function(error, day){
+					error ? console.log(error) : null
+				})
+			})
+			res.send({'success': true, data: 'good'});
+		})
+
+	})
+
 })
 
 module.exports = router;

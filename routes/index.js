@@ -167,45 +167,6 @@ router.get('/classRoom/:id', function(req, res, next){
    })
 })
 
-router.post('/classRoom/:id', function(req, res, next){
-
-	var assign = new Assignment({
-		name: req.body.assignName,
-		expireAt: req.body.assignDate,
-		active: true,
-		weight: req.body.assignWeight
-	})
-
-	assign.save(function(error, assign){
-		error ? console.log(error) : null
-
-		var classRoomAssign = new ClassRoomAssignment({
-			classRoom: req.params.id,
-			assignment: assign._id
-		})
-
-		classRoomAssign.save(function(error, cRA){
-			error ? console.log(error) : null
-
-			for(var i = 0 ; i < req.body.assignDays; i++){
-				var day = new Day({
-					classRoom: req.params.id,
-					assignment: assign._id,
-					number: i+1,
-					active: true
-				})
-
-				day.save(function(error, day){
-					error ? console.log(error) : null
-				})
-			}
-			res.redirect('/classRoom/' + req.params.id)
-		})
-
-	})
-
-})
-
 router.get('/join/:id', function(req, res, next) {
 	var cRU = new ClassRoomUser({
 		user: req.user.id,

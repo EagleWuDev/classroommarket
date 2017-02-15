@@ -1,6 +1,8 @@
 <link rel="stylesheet" type="text/css" href="/stylesheets/home.css"/>
 <link rel="stylesheet" type="text/css" href="/stylesheets/class.css"/>
 <script type="text/javascript" src="/javascripts/endMan.js"></script>
+<script type="text/javascript" src="/javascripts/createAssign.js"></script>
+
 {{#if error}}
     <div class="alert alert-danger" role="alert">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -37,6 +39,7 @@
         <h4 class="panel-title">
           <a data-toggle="collapse" data-parent="#accordian" href="#collapse{{assignment._id}}">{{assignment.assignment.name}}</a>
           </h4>
+          <div class="assign" id="{{assignment.assignment._id}}"></div>
       </div>
 
       <div id="collapse{{assignment._id}}" class="panel-collapse collapse">
@@ -44,7 +47,7 @@
         <h3>{{assignment.assignment.name}}</h3>
          <h4>Due Date: {{assignment.assignment.expireAt}}</h4>
          <h5>Weight: {{assignment.assignment.weight}}</h5>
-         <h5>ExtraCredit in Circulation: {{assignment.assignment.extraCredit}}</h5>
+         <h5>Supply: {{assignment.assignment.extraCredit}}</h5>
          {{#if assignment.assignment.active}}
           <h6 class="active">Active</h6>
           <button class="end_assignment" assignId="{{assignment.assignment._id}}" >End Assignment Manually</button>
@@ -62,6 +65,7 @@
             {{else}}
             <h5>Day: {{number}}</h5>
             <h6>{{extraCredit}} Gronks Generated</h6>
+            <h6>Wage Rate {{wage}}</h6>
 
             </div>
            
@@ -107,31 +111,34 @@
         <h4 class="modal-title" id="myModalLabel">Create Assignment</h4>
       </div>
       <div class="modal-body">
-        <form method="POST">
+        <form>
         <div class="form-group">
         	<label>Name</label>
-        	<input type="text" name="assignName" class="form-control">
+        	<input type="text" id="assignName" class="form-control">
         </div>
 
         <div class="form-group">
         	<label>Due Date</label>
-        	<input type="Date" name="assignDate" class="form-control">
+        	<input type="Date" id="assignDate" class="form-control">
         </div>
 
-        <div class="form-group">
+         <div class="form-group">
+          <label>Assignment Weight (Out of 1)</label>
+          <input type="Number" step="0.01" class="form-control" id="assignWeight">
+        </div>
+
+        <div class="form-group" id="days">
         	<label>Add Class Days</label>
         	<p>Enter in the Number of Class Days to be Associated with this Assignment</p>
-        	<input type="Number" name="assignDays" class="form-control">
+        	<input type="Number" name="assignDays" id = "numDays" class="form-control">
         </div>
 
-        <div class="form-group">
-        	<label>Assignment Weight (Out of 1)</label>
-        	<input type="Number" step="0.01" class="form-control" name="assignWeight">
-        </div>
+
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Create Assignment</button>
+        <button type="submit" id = "nextButton" class="btn btn-primary">Next</button>
       	</form>
       </div>
     </div>

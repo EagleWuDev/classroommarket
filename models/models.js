@@ -63,6 +63,10 @@ var daySchema = mongoose.Schema({
 	number: {
 		type: Number
 	},
+	wage: {
+		type: Number,
+		default: 1
+	},
 	active: Boolean
 })
 
@@ -131,6 +135,10 @@ var assignmentSchema = mongoose.Schema({
 	extraCredit: {
 		type: Number,
 		default: 0
+	},
+	lastDay: {
+		type: Number,
+		default: 1
 	}
 })
 module.exports = {
