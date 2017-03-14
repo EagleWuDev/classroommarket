@@ -13,6 +13,7 @@
     "debug": "~2.2.0",
     "express": "^4.13.4",
     "express-session": "^1.14.1",
+    "handlebars-intl": "^1.1.2",
     "hbs": "~4.0.0",
     "mongoose": "^4.6.3",
     "morgan": "~1.7.0",

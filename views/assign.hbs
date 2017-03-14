@@ -1,6 +1,5 @@
 <link rel="stylesheet" type="text/css" href="/stylesheets/home.css"/>
 <link rel="stylesheet" type="text/css" href="/stylesheets/class.css">
-<script type="text/javascript" src="/javascripts/addgronks.js"></script>
 {{#if error}}
     <div class="alert alert-danger" role="alert">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -13,30 +12,25 @@
 	<div class="container">
 		<div class="col-md-12">
 			<h1>{{name}}</h1>
-			<h3>At {{college}}</h3>
       <a href="/home"><h5>Go Home</h5></a>
 		</div>
 	</div>
 </div>
 
-
 <div class="main">
 	<div class="container">
-	<div class="col-md-12">
-		<h1 id= "assignment" assign="{{assignmentId}}" classRoom="{{classRoomId}}" day = "{{day}}" class="secondTitle">{{assignment}} - Day {{number}}</h1>
-
+		<div class="col-md-12">
+    <h1 class="secondTitle">Assignment: {{name}}</h1>
+      <h6>weight: {{weight}}</h6>
+      <h6>averageWage: {{averageWage}}</h6>
+      <h6>Supply: {{supply}}</h6>
+      <h6>Inflation: {{inflation}}</h6>
+      <h6>Price: {{price}}</h6>
+      <h6>WeightedPrice: {{weightedPrice}}</h6>
+      {{#each transactions}}
+        <h5>{{user.username}} - Extra Credit Received: {{extraCreditReceived}}/Amount Spent: {{spent}}</h5>
+      {{/each}}
+		</div>
 	</div>
 </div>
 
-<div class="clear"></div>
-
-	<center>
-	{{#each classRoomUser}}
-		{{user.username}}<input type="number" id = "{{user._id}}" name="gronks[]"/>
-
-
-	{{/each}}
-<div class="clear"></div>
-	<button id="giveGronks">Enter Extra Credit</button>
-	</center>
-</div>

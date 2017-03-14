@@ -38,9 +38,9 @@ router.post('/addGronks', function(req, res, next){
 					var asyncCall = new Promise(function(resolve, reject) {
 						var count = 0;
 						data.forEach(function(item, index){
-
+							var eC = parseInt(item[1]);
 							var num = parseInt(item[1]) * day.wage;
-							count+=num;
+							count+=eC;
 							ClassRoomUser.findOneAndUpdate({user: mongoose.Types.ObjectId(item[0]), classRoom: classId}, {$inc:{gronks:num}}, {new: true}).exec(function(error, response){
 									console.log(count)
 									console.log(response);
@@ -159,26 +159,47 @@ router.post('/calculatePrice', function(req, res, next){
 									assignment.inflation = 0;
 									break;
 								} else {
-									assignment.inflation = weighted/classRoomAssignments[i-1].assignment.weightedPrice;
+									weightedYesterday = classRoomAssignments[i-1].assignment.weightedPrice;
+									console.log('weightedYesterday',weightedYesterday);
+									assignment.inflation = ((weighted - weightedYesterday)/weightedYesterday) * 100;
 									break;
 								}
 							}
 						}
 
-						assignment.save(function(error, update){
-							error ? console.log(error) : console.log(update)
 
-							transactions.forEach(function(item, index){
-								var extraCreditReceived = item.spent/price;
-								var weightedCreditReceived = item.spent/weighted;
-								Transaction.findByIdAndUpdate(item._id, {extraCreditReceived: extraCreditReceived, weightedCreditReceived: weightedCreditReceived}, {new: true}).exec(function(error, transaction){
-									console.log('transaction updated')
-								})
+						Day.find({'assignment': assignment._id}).lean().exec(function(dayerror, days){
+							dayerror ? console.log(error) : console.log(days)
+
+							var sumTotalWage = 0;
+							var sumExtraCredit = 0;
+							var averageWage;
+
+							days.forEach(function(item, index){
+								sumTotalWage+=(item.extraCredit * item.wage);
+								sumExtraCredit+=item.extraCredit;
 							})
+
+							averageWage = (sumTotalWage/sumExtraCredit);
+
+							assignment.averageWage = averageWage;
+
+								assignment.save(function(error, update){
+									error ? console.log(error) : console.log(update)
+
+									transactions.forEach(function(item, index){
+										var extraCreditReceived = item.spent/price;
+										var weightedCreditReceived = item.spent/weighted;
+										Transaction.findByIdAndUpdate(item._id, {extraCreditReceived: extraCreditReceived, weightedCreditReceived: weightedCreditReceived}, {new: true}).exec(function(error, transaction){
+										console.log('transaction updated')
+										})
+								})
 
 								res.json({'success': true, 'message': 'assignment ended'});
 
 						});
+
+						})
 
 
 					})

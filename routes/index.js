@@ -7,6 +7,7 @@ var Assignment = require('../models/models').Assignment;
 var ClassRoomAssignment = require('../models/models').ClassRoomAssignment;
 var Day = require('../models/models').Day;
 var Transaction = require('../models/models').Transaction;
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index');
@@ -123,12 +124,36 @@ router.get('/classRoom/:id', function(req, res, next){
 						console.log('sorted array', assignmentRet);
 						console.log(classRoom._id)
 
-						res.render('classroom', {
-						name: classRoom.name,
-						college: classRoom.college,
-						classId: classRoom._id,
-						assignments: assignmentRet
-					})
+						ClassRoomUser.find({'classRoom': classRoom._id}).lean().exec(function(error, classRoomUser){
+
+							var count = 0;
+
+							console.log(classRoomUser);
+
+
+							Transaction.find({'classRoom': classRoom._id, 'extraCreditReceived': {$lt: 1}}).exec(function(error, transactions) {
+
+								classRoomUser.forEach(function(item, index){
+									count+=item.gronks;
+								})
+
+								transactions.forEach(function(item, index){
+									count+=item.spent;
+								})
+
+								console.log(count);
+
+								res.render('classroom', {
+									count: count,
+									name: classRoom.name,
+									college: classRoom.college,
+									classId: classRoom._id,
+									assignments: assignmentRet
+								})
+
+
+							})
+						})
 				} else {
 					res.send('fuckkkkk')
 				}
@@ -201,6 +226,30 @@ router.get('/day/:id', function(req, res, next){
 		})
 
 	})
+})
+
+router.get('/assignment/:id', function(req, res, next){
+
+	Assignment.findById(req.params.id).lean().exec(function(error, assignment){
+		Transaction.find({'assignment': req.params.id}).populate('user').lean().exec(function(error1, transactions){
+
+			console.log(assignment);
+			console.log(transactions);
+			res.render('assign', {
+				name: assignment.name,
+				weight: assignment.weight,
+				averageWage: assignment.averageWage,
+				supply: assignment.extraCredit,
+				inflation: assignment.inflation,
+				price: assignment.price,
+				weightedPrice: assignment.weightedPrice,
+				transactions: transactions
+			})
+
+		})
+
+	})
+
 })
 
 module.exports = router;
