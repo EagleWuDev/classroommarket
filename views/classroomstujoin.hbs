@@ -22,6 +22,10 @@
 <div class="main">
 	<div class="container">
 		<div class="col-md-12">
+    <h2>Your Current Balance: {{classRoomUser.gronks}} Gronks</h2>
+    <h2>Total Gronks in the Economy: {{totalGronks}}</h2>
+    <h3>You have earned: {{eCRec}} Extra Credit</h3>
+    <h3>Your grade has been impacted by: {{weighted}} Points</h3>
     <h1 class="secondTitle">Assignments</h1>
     {{#if assignments}}
 
@@ -73,7 +77,7 @@
             </div>
          {{else}}
           <h6>Not Active</h6>
-          <a href="/assignments/{{assignment._id}}"><h6>Price</h6></a>
+          <a href="/assignment/{{assignment._id}}"><h6>Price</h6></a>
 
          {{/if}}
       </div>

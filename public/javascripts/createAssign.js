@@ -30,12 +30,10 @@ $('document').ready(function() {
 		$('#days').append(wrapper)
 	}
 
-	console.log(id);
 	$('#nextButton').click(function(e){
 		var wages = $('.wage');
 
 		if(wages.length === 0){
-			console.log('in herewages')
 			e.preventDefault();
 			if(len <= 0){
 				localStorage.classId = 1;
@@ -81,6 +79,36 @@ $('document').ready(function() {
 				}
 			})
 		}
+	})
+
+
+
+	$('.nextButton1').click(function(e){
+		e.preventDefault();
+		console.log('clicked');
+		var assignId = $(this).attr('assign-id');
+		var dueDate = $('#newAssignDate' + assignId).val();
+		var amount = $('#addAssignDays' + assignId).val();
+
+		$.ajax({type: "POST",
+			data: {
+				'assignId': assignId,
+				'dueDate': dueDate,
+				'wageAmount':amount,
+				'classId': classId
+			},
+			url: '/editAssign/' + classId,
+			success:function(response){
+				console.log(response);
+				if(response.success){
+					window.location.replace('/classRoom/'+classId);
+				}
+
+			}
+		})
+
+
+
 	})
 	
 

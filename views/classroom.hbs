@@ -27,7 +27,9 @@
 		<div class="col-md-12">
     <h1 class="secondTitle" id="class" classId = "{{classId}}">Assignments</h1>
     <h2>Total Gronks in Circulation: {{count}}</h2>
+    <h2>Total ExtraCredit Available: {{totalEC}}</h2>
 
+     <h2><a href="/charts/{{classId}}">Aggregate Charts</a></h2>
     {{#if assignments}}
 
 
@@ -51,14 +53,56 @@
          <h4>Due Date: {{assignment.assignment.expireAt}}</h4>
          <h5>Weight: {{assignment.assignment.weight}}</h5>
          <h5>Supply: {{assignment.assignment.extraCredit}}</h5>
+
+         {{#if canDelete}}
+          <a href="/delete/{{assignment.assignment._id}}">DELETE ASSIGNMENT</a>
+         {{/if}}
          {{#if assignment.assignment.active}}
           <h6 class="active">Active</h6>
-          <button class="end_assignment" assignId="{{assignment.assignment._id}}" >End Assignment Manually</button>
-
+          <button class="end_assignment" assignId="{{assignment.assignment._id}}">End Assignment Manually</button>
+          <button class="btn-default" type="button" data-toggle="modal" data-target="#addCreditModal{{assignment.assignment._id}}">Add Extra Credit Manually</button>
              <div>
              <hr>
              <h4>Add Gronks</h4>
              <center>
+
+
+              <!-- Modal 2-->
+              <div class="modal fade" id="addCreditModal{{assignment.assignment._id}}" tabindex="-1" role="dialog" aria-labelledby="addCreditModalLabel{{assignment.assignment._id}}">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      <h4 class="modal-title" id="myModalLabel">Add Extra Credit to {{assignment.assignment.name}}</h4>
+                    </div>
+                    <div class="modal-body">
+                      <form>
+                   
+                      <div class="form-group">
+                      <label>Add ExtraCredit</label>
+                      <input type="number" class="form-control" name="extraCreditAdd" id="extraCreditAdd{{assignment.assignment._id}}">
+                      </div>
+
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      <button id = "addExtraCredit" assignId="{{assignment.assignment._id}}" class="btn btn-primary">Submit</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+
+
+
+
+
+
+
+
             {{#each days}}
          
             <div class="gronk">
@@ -76,6 +120,55 @@
             {{/if}}
           
             {{/each}}
+
+
+
+            <button type="button" data-toggle="modal" data-target="#editAssign{{assignment.assignment._id}}">Edit Assignment</button>
+
+
+            <!-- Modal -->
+        <div class="modal fade" id="editAssign{{assignment.assignment._id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+           <div class="modal-dialog" role="document">
+             <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Edit {{assignment.assignment.name}}</h4>
+              </div>
+              <div class="modal-body">
+                <form>
+
+                <div class="form-group">
+                  <label>Change Due Date</label>
+                  <h6>Original Due Date: {{assignment.assignment.expireAt}}</h6>
+                  <input type="Date" id="newAssignDate{{assignment.assignment._id}}" class="form-control">
+                </div>
+
+
+                <div class="form-group" id="days">
+                  <label>Add Another Class Day (Optional)</label>
+                  <p>Enter how much wage this extra day should have <br>(leave blank if not adding another day)</p>
+                  <input type="Number" id = "addAssignDays{{assignment.assignment._id}}" class="form-control">
+                </div>
+
+
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class = "nextButton1" assign-id="{{assignment.assignment._id}}" class="btn btn-primary">Next</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+
+
+
             </center>
       </div>
          {{else}}
@@ -92,6 +185,8 @@
     </div>
     <center>
         <button class="btn btn-default assignmentAdd" type="button" data-toggle="modal" data-target="#myModal">Add Assignment</button>
+        <div class="clear"></div>
+        <button class="btn btn-default"><a href="/students/{{classId}}">Add Gronks to Students</a></button>
     </center>
 
     {{else}}
@@ -147,3 +242,8 @@
     </div>
   </div>
 </div>
+
+
+
+
+

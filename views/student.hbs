@@ -1,0 +1,34 @@
+<link rel="stylesheet" type="text/css" href="/stylesheets/home.css"/>
+<link rel="stylesheet" type="text/css" href="/stylesheets/class.css">
+<script type="text/javascript" src="/javascripts/addExtraGronks.js"></script>
+{{#if error}}
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+      {{error}}
+    </div>
+{{/if}}
+
+<div class="header">
+	<div class="container">
+		<div class="col-md-12">
+			<h1>{{classRoom.name}}</h1>
+			<h3>At {{classRoom.college}}</h3>
+      <a href="/home"><h5>Go Home</h5></a>
+		</div>
+	</div>
+</div>
+
+
+<div class="main">
+	
+
+
+	<center>
+	{{#each classRoomUser}}
+		{{user.username}}<input type="number" id = "{{user._id}}" name="gronks[]"/>
+	{{/each}}
+<div class="clear"></div>
+	<button id="giveExtraGronks" classId="{{classRoom._id}}">Add Extra Credit</button>
+	</center>
+</div>

@@ -1,0 +1,34 @@
+<link rel="stylesheet" type="text/css" href="/stylesheets/home.css"/>
+<link rel="stylesheet" type="text/css" href="/stylesheets/class.css">
+{{#if error}}
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+      {{error}}
+    </div>
+{{/if}}
+
+<div class="header">
+	<div class="container">
+		<div class="col-md-12">
+			<h1>{{name}}</h1>
+      <a href="/home"><h5>Go Home</h5></a>
+		</div>
+	</div>
+</div>
+
+<div class="main">
+	<div class="container">
+		<div class="col-md-12">
+    <h1 class="secondTitle">Assignment: {{name}}</h1>
+      <h6>weight: {{weight}}</h6>
+      <h6>averageWage: {{averageWage}}</h6>
+      <h6>Supply: {{supply}}</h6>
+      <h6>Inflation: {{inflation}}</h6>
+      <h6>Price: {{price}}</h6>
+      <h6>WeightedPrice: {{weightedPrice}}</h6>
+        <h5>{{transaction.user.username}} - Extra Credit Received: {{transaction.extraCreditReceived}}/Amount Spent: {{transaction.spent}}</h5>
+		</div>
+	</div>
+</div>
+

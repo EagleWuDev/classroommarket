@@ -7,6 +7,7 @@ var Assignment = require('../models/models').Assignment;
 var ClassRoomAssignment = require('../models/models').ClassRoomAssignment;
 var Day = require('../models/models').Day;
 var Transaction = require('../models/models').Transaction;
+var Helpers = require('handlebars-helpers');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -81,14 +82,11 @@ router.post('/home', function(req, res, next){
 })
 
 router.get('/classRoom/:id', function(req, res, next){
-	console.log(req.user.id)
 	ClassRoom.findById(req.params.id).exec(function(error, classRoom){
 
 	if(classRoom.owner + "" === req.user.id + "") {
-		console.log('in here');
+	
 		ClassRoomAssignment.find({"classRoom":req.params.id}).populate('assignment').sort('assignment.expireAt').lean().exec(function(err, assignments){
-
-			console.log('assignments', assignments)
 			var assignmentRet = [];
 
 			var asyncCall = new Promise(function(resolve, reject){
@@ -99,7 +97,6 @@ router.get('/classRoom/:id', function(req, res, next){
 
 
 				assignments.forEach(function(item, index){
-					console.log(item);
 					Day.find({'assignment': item.assignment._id}).sort("number").lean().exec(function(err2, days){
 							assignmentRet.push({assignment: item, days: days})
 						if(index === assignments.length-1){
@@ -112,24 +109,39 @@ router.get('/classRoom/:id', function(req, res, next){
 
 			asyncCall.then(function(assignmentRet){
 
-				console.log('assignment')
+				var totalEC = 0;
+		
 				if(classRoom.owner + "" === req.user.id + ""){
 
-					console.log("assignmentRet1stassignment");
-
 						assignmentRet.sort(function(a,b){
-							return new Date(a.assignment.assignment.expireAt) - new Date(b.assignment.assignment.expireAt)
+							return new Date("" + b.assignment.assignment.expireAt) - new Date("" + a.assignment.assignment.expireAt)
 						})
 
-						console.log('sorted array', assignmentRet);
-						console.log(classRoom._id)
+						assignmentRet.reverse();
+
+					
+						assignmentRet.forEach(function(item, index){
+							if (item.assignment.assignment.active) {
+								totalEC = totalEC + item.assignment.assignment.extraCredit;
+							}
+							
+							for(var x = 0; x < item.days.length; x++) {
+								if(!item.days[x].active) {
+									item['canDelete'] = false;
+									break;
+								} else if (item.days[x].active && x === item.days.length-1) {
+									item['canDelete'] = true;
+								}
+
+							}
+
+						})
+
+					
 
 						ClassRoomUser.find({'classRoom': classRoom._id}).lean().exec(function(error, classRoomUser){
 
 							var count = 0;
-
-							console.log(classRoomUser);
-
 
 							Transaction.find({'classRoom': classRoom._id, 'extraCreditReceived': {$lt: 1}}).exec(function(error, transactions) {
 
@@ -148,6 +160,7 @@ router.get('/classRoom/:id', function(req, res, next){
 									name: classRoom.name,
 									college: classRoom.college,
 									classId: classRoom._id,
+									totalEC: totalEC,
 									assignments: assignmentRet
 								})
 
@@ -162,17 +175,45 @@ router.get('/classRoom/:id', function(req, res, next){
 	} else {
 
 	ClassRoomUser.find({'user' : req.user.id, 'classRoom' : req.params.id}).exec(function(error, classroomUser){
-		console.log(classroomUser);
 		ClassRoomAssignment.find({"classRoom": req.params.id}).populate('assignment').sort('assignment.expireAt').lean().exec(function(err, assignments){
 		
 			if(classroomUser.length > 0){
 				
-				res.render('classroomstujoin', {
-					name: classRoom.name,
-					college: classRoom.college,
-					assignments: assignments,
-					classId: classRoom._id
-				})
+				var count = 0;
+				var extraCreditRec = 0;
+				var weightCreditRec = 0;
+
+				ClassRoomUser.find({'classRoom': req.params.id}).lean().exec(function(error, classRoomUsers){
+
+					Transaction.find({'classRoom': req.params.id, 'extraCreditReceived': {$lt: 1}}).exec(function(error, transactions) {
+
+						classRoomUsers.forEach(function(item, index){
+							count+=item.gronks;
+						})
+						transactions.forEach(function(item, index){
+							count+=item.spent;
+						})
+
+						Transaction.find({'classRoom': req.params.id, 'extraCreditReceived': {$gt: 1}, 'user': req.user.id}).lean().exec(function(error1, transactionsUser){
+
+							transactionsUser.forEach(function(item, index){
+								extraCreditRec+=item.extraCreditReceived;
+								weightCreditRec+=item.weightedCreditReceived;
+							})
+
+							res.render('classroomstujoin', {
+								name: classRoom.name,
+								totalGronks: count,
+								college: classRoom.college,
+								assignments: assignments,
+								classRoomUser: classroomUser[0],
+								eCRec: extraCreditRec,
+								weighted: weightCreditRec, 
+								classId: classRoom._id
+							})
+						})
+					})
+			})
 			} else {
 				
 				console.log(assignments);
@@ -186,7 +227,7 @@ router.get('/classRoom/:id', function(req, res, next){
 
 		    	
 		}
-	})
+		})
 	})
 	}
    })
@@ -231,11 +272,11 @@ router.get('/day/:id', function(req, res, next){
 router.get('/assignment/:id', function(req, res, next){
 
 	Assignment.findById(req.params.id).lean().exec(function(error, assignment){
-		Transaction.find({'assignment': req.params.id}).populate('user').lean().exec(function(error1, transactions){
-
-			console.log(assignment);
-			console.log(transactions);
-			res.render('assign', {
+		Transaction.findOne({'assignment': req.params.id, 'user': req.user.id}).populate('user').lean().exec(function(error1, transaction){
+			console.log(transaction)
+			console.log(req.user.id);
+			if(transaction) {
+				res.render('assignstu', {
 				name: assignment.name,
 				weight: assignment.weight,
 				averageWage: assignment.averageWage,
@@ -243,13 +284,118 @@ router.get('/assignment/:id', function(req, res, next){
 				inflation: assignment.inflation,
 				price: assignment.price,
 				weightedPrice: assignment.weightedPrice,
-				transactions: transactions
-			})
+				transaction: transaction
+				})
+			} else {
+					Transaction.find({'assignment': req.params.id}).populate('user classRoom').lean().exec(function(error2, transactions){
 
+						console.log(assignment);
+						console.log("transactions", transactions);
+
+						if(transactions[0].classRoom.owner + "" === req.user.id){
+							res.render('assign', {
+								name: assignment.name,
+								weight: assignment.weight,
+								averageWage: assignment.averageWage,
+								supply: assignment.extraCredit,
+								inflation: assignment.inflation,
+								price: assignment.price,
+								weightedPrice: assignment.weightedPrice,
+								transactions: transactions
+							})
+						} else {
+							res.render('assignnil', {
+								name: assignment.name,
+								weight: assignment.weight,
+								averageWage: assignment.averageWage,
+								supply: assignment.extraCredit,
+								inflation: assignment.inflation,
+								price: assignment.price,
+								weightedPrice: assignment.weightedPrice
+							})
+						}
+
+					})
+
+
+			}
 		})
 
 	})
 
+})
+
+
+
+router.get('/students/:id', function(req, res, next){
+
+	ClassRoom.findById(req.params.id).lean().exec(function(error, classRoom){
+		if(classRoom.owner + "" !== req.user.id) {
+			res.redirect('/accessDenied')
+		} else {
+			ClassRoomUser.find({'classRoom': req.params.id}).populate('user').lean().exec(function(err, classRoomUser){
+
+				res.render('student', {
+					classRoom: classRoom,
+					classRoomUser: classRoomUser
+				})
+			})
+		}
+	})
+})
+
+router.get('/charts/:id', function(req, res, next){
+
+	ClassRoom.findById(req.params.id).lean().exec(function(error, classRoom){
+		ClassRoomAssignment.find({'classRoom': req.params.id}).populate('assignment').lean().exec(function(error1, classRoomAssigns){
+			
+			classRoomAssigns.sort(function(a,b){
+				return new Date(a.assignment.expireAt) - new Date(b.assignment.expireAt)
+			})
+
+			console.log(classRoomAssigns);
+
+			var price = [];
+			var averageWage = [];
+			var inflation = [];
+			var weightedPrice = [];
+			var labels = [];
+
+			classRoomAssigns.forEach(function(item, index){
+				price.push(item.assignment.price);
+				averageWage.push(item.assignment.averageWage);
+				inflation.push(item.assignment.inflation);
+				weightedPrice.push(item.assignment.weightedPrice);
+				labels.push(item.assignment.name);
+			})
+
+
+			res.render('chart', {
+				name: classRoom.name,
+				college: classRoom.college,
+				price: price,
+				averageWage: averageWage,
+				inflation: inflation,
+				weightedPrice: weightedPrice,
+				labels: labels
+			})
+
+		})
+	})
+})
+
+router.get('/delete/:id', function(req, res, next){
+	Assignment.findById(req.params.id).remove().exec(function(error, assign){
+		ClassRoomAssignment.find({"assignment" : req.params.id}).exec(function(error, classRoomAssignment){
+			console.log(classRoomAssignment);
+			classId = classRoomAssignment[0].classRoom;
+			Day.find({"assignment" : req.params.id}).remove().exec(function(error, days){
+				ClassRoomAssignment.find({"assignment": req.params.id}).remove().exec(function(error, stuff){
+					res.redirect('/classRoom/' + classId);
+				})
+			})
+		})
+	})
 })
 
 module.exports = router;

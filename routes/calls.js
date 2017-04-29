@@ -287,4 +287,114 @@ router.post('/classRoom/:id', function(req, res, next){
 
 })
 
+router.post('/addExtraCreditAssign', function(req, res, next){
+	console.log('body',req.body);
+	classId = mongoose.Types.ObjectId(req.body.classId);
+	assignId = mongoose.Types.ObjectId(req.body.assignId);
+	amount = parseInt(req.body.amount);
+
+	ClassRoom.findById(classId).lean().exec(function(error, classRoom){
+		if(classRoom.owner + "" !== req.user.id+ ""){
+			res.json({'success': false, "message": "Nice Try Fuck Face"});
+		} else {
+			Assignment.findByIdAndUpdate(assignId, {$inc: {extraCredit: amount}}, {new: true}).exec(function(error, assign){
+				error ? console.log(error) : console.log(assign)
+
+				res.json({'success': true, "message": "updated"})
+
+			})
+		}
+	})
+
+})
+
+router.post('/addExtraGronks', function(req, res, next){
+	console.log('body',req.body);
+	classId = mongoose.Types.ObjectId(req.body.classId)
+
+	ClassRoom.findById(classId).lean().exec(function(error, classRoom){
+		if(classRoom.owner + "" !== req.user.id+""){
+			res.json({'succes': false, 'message': 'Good try asshole'});
+		} else {
+			var data = JSON.parse(req.body.data);
+
+			var asyncCall = new Promise(function(resolve, reject) {
+						var count = 0;
+						data.forEach(function(item, index){
+							var eC = parseInt(item[1]);
+							count+=eC;
+							ClassRoomUser.findOneAndUpdate({user: mongoose.Types.ObjectId(item[0]), classRoom: classId}, {$inc:{gronks:eC}}, {new: true}).exec(function(error, response){
+								if(index === data.length-1) {
+									resolve(count)
+								}
+							})
+						})
+					})
+
+				asyncCall.then(function(count){
+					res.send({'success': true, 'message':'total gronks added' + count});
+				})
+		}
+	})
+})
+
+router.post('/editAssign/:id', function(req, res, next){
+	console.log('body', req.body);
+	classId = mongoose.Types.ObjectId(req.body.classId);
+	assignId = mongoose.Types.ObjectId(req.body.assignId);
+
+	ClassRoom.findById(classId).lean().exec(function(error, classRoom){
+		if(classRoom.owner + "" !== req.user.id+""){
+			res.json({'success': false, "message": 'Not yo ClassRoom!!'})
+		} else {
+			if(req.body.dueDate) {
+				Assignment.findByIdAndUpdate(assignId, {expireAt: new Date(req.body.dueDate)}, {new: true}).exec(function(error, assign){
+					console.log('update', assign)
+
+					if(req.body.wageAmount) {
+						var d = new Day({
+							classRoom: classId,
+							assignment: assign._id,
+							number: assign.lastDay,
+							active: true,
+							wage: parseInt(req.body.wageAmount)
+						})
+
+						d.save(function(error, day){
+							error ? console.log(error) : null
+							Assignment.findByIdAndUpdate(assignId, {$inc: {lastDay: 1}}).exec(function(error, assign1){
+								res.json({'success': true, "message": "Updated"})
+							})
+						});
+
+
+					} else {
+						res.json({'success': true, "message": "Updated"})
+					}
+				})
+			} else if (req.body.wageAmount) {
+					Assignment.findById(assignId).lean().exec(function(error, assign){
+						var d = new Day({
+							classRoom: classId,
+							assignment: assign._id,
+							number: assign.lastDay,
+							active: true,
+							wage: parseInt(req.body.wageAmount)
+						})
+
+						d.save(function(error, day){
+							error ? console.log(error) : console.log(day)
+							Assignment.findByIdAndUpdate(assignId, {$inc: {lastDay: 1}}).exec(function(error, assign1){
+								res.json({'success': true, "message": "Updated"})
+							})
+						});
+					})
+			} else {
+				res.json({'success': true, 'message': 'nothing to update'})
+			}
+		}
+
+	})
+})
+
 module.exports = router;

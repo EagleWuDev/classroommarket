@@ -1,0 +1,231 @@
+<link rel="stylesheet" type="text/css" href="/stylesheets/home.css"/>
+<link rel="stylesheet" type="text/css" href="/stylesheets/class.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.js"></script>
+
+
+{{#if error}}
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+      {{error}}
+    </div>
+{{/if}}
+
+<div class="header">
+	<div class="container">
+		<div class="col-md-12">
+			<h1>{{name}}</h1>
+			<h3>At {{college}}</h3>
+      <a href="/home"><h5>Go Home</h5></a>
+		</div>
+	</div>
+</div>
+
+<div class="main">
+	<div class="container">
+	<div class="col-md-12">
+			<canvas id="priceChart" width="100%" height="50%"></canvas>
+
+			<canvas id="averageWage" width="100%" height="50%"></canvas>
+
+			<canvas id="inflation" width="100%" height="50%"></canvas>
+
+			<canvas id="weightedPrice" width="100%" height="50%"></canvas>
+		</div>
+	</div>
+</div>
+
+<script>
+
+	var labels = [];
+	{{#each labels}}
+		labels.push("{{this}}");
+	{{/each}}
+
+	console.log(labels);
+
+	var prices = [];
+	{{#each price}}
+		prices.push({{this}});
+	{{/each}}
+
+	var averageWages = [];
+	{{#each averageWage}}
+		averageWages.push({{this}})
+	{{/each}}
+
+	var inflations = [];
+	{{#each inflation}}
+		inflations.push({{this}})
+	{{/each}}
+
+	var weightedPrices = [];
+	{{#each weightedPrice}}
+		weightedPrices.push({{this}})
+	{{/each}}
+
+	var ctx = document.getElementById("priceChart");
+	var priceChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [
+        {
+            label: "Price",
+            fill: false,
+            lineTension: 0.1,
+            backgroundColor: "rgba(75,192,192,0.4)",
+            borderColor: "rgba(75,192,192,1)",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: prices,
+            spanGaps: false,
+        }
+    ]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+
+	var ctx1 = document.getElementById("averageWage");
+	var averageWageChart = new Chart(ctx1, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [
+        {
+            label: "Average Wage",
+            fill: false,
+            lineTension: 0.1,
+            backgroundColor: "#20ff00",
+            borderColor: "#20ff00",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: averageWages,
+            spanGaps: false,
+        }
+    ]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+
+	var ctx2 = document.getElementById("inflation");
+	var inflationChart = new Chart(ctx2, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [
+        {
+            label: "Inflation",
+            fill: false,
+            lineTension: 0.1,
+            backgroundColor: "#ff0000",
+            borderColor: "#ff0000",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: inflations,
+            spanGaps: false,
+        }
+    ]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+
+	var ctx3 = document.getElementById("weightedPrice");
+	var averageWageChart = new Chart(ctx3, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [
+        {
+            label: "Weighted Price",
+            fill: false,
+            lineTension: 0.1,
+            backgroundColor: "#ff8200",
+            borderColor: "#ff8200",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: weightedPrices,
+            spanGaps: false,
+        }
+    ]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+
+</script>
