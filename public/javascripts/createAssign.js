@@ -27,7 +27,7 @@ $('document').ready(function() {
 
 		wrapper.html();
 
-		$('div#myModal').append(wrapper)
+		$('div#doge').append(wrapper)
 	}
 
 	$('#nextButton').click(function(e){
