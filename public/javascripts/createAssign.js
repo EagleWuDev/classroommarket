@@ -27,7 +27,7 @@ $('document').ready(function() {
 
 		wrapper.html();
 
-		$('div#days').append(wrapper)
+		$('div#myModal').append(wrapper)
 	}
 
 	$('#nextButton').click(function(e){
