@@ -22,7 +22,7 @@ $('document').ready(function() {
 		
 			var current = lastDay + i;
 			wrapper.append($('<label>Class #' + current + ' Wage</label>'));
-			wrapper.append($('<input type = "Number" id=' + current +' class="form-control wage' + assign_id + '" value=1>'));
+			wrapper.append($('<input type = "Number" id=' + current +' class="form-control wage" value=1>'));
 		}
 
 		wrapper.html();
@@ -31,11 +31,8 @@ $('document').ready(function() {
 	}
 
 	$('#nextButton').click(function(e){
-		var assign_id = $(this).attr('assign_id');
 
-		console.log(assign_id);
-
-		var wages = $('.wage' + assign_id);
+		var wages = $('.wage');
 
 		if(wages.length === 0){
 			e.preventDefault();
