@@ -180,6 +180,69 @@
       </div>  
       </div>
       </center>
+
+
+
+
+        <!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Create Assignment</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" id="assignName" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label>Due Date</label>
+          <input type="Date" id="assignDate" class="form-control">
+        </div>
+
+         <div class="form-group">
+          <label>Assignment Weight (Out of 1)</label>
+          <input type="Number" step="0.01" class="form-control" id="assignWeight">
+        </div>
+
+        <div class="form-group" id="days">
+          <label>Add Class Days</label>
+          <p>Enter in the Number of Class Days to be Associated with this Assignment</p>
+          <input type="Number" name="assignDays" id = "numDays" class="form-control">
+        </div>
+
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" id = "nextButton" assign_id={{assignment.assignment._id}} class="btn btn-primary">Next</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     {{/each}}
 
     </div>
@@ -200,48 +263,6 @@
 	</div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Create Assignment</h4>
-      </div>
-      <div class="modal-body">
-        <form>
-        <div class="form-group">
-        	<label>Name</label>
-        	<input type="text" id="assignName" class="form-control">
-        </div>
-
-        <div class="form-group">
-        	<label>Due Date</label>
-        	<input type="Date" id="assignDate" class="form-control">
-        </div>
-
-         <div class="form-group">
-          <label>Assignment Weight (Out of 1)</label>
-          <input type="Number" step="0.01" class="form-control" id="assignWeight">
-        </div>
-
-        <div class="form-group" id="days">
-        	<label>Add Class Days</label>
-        	<p>Enter in the Number of Class Days to be Associated with this Assignment</p>
-        	<input type="Number" name="assignDays" id = "numDays" class="form-control">
-        </div>
-
-
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" id = "nextButton" class="btn btn-primary">Next</button>
-      	</form>
-      </div>
-    </div>
-  </div>
-</div>
 
 
 

@@ -8,7 +8,7 @@ $('document').ready(function() {
 	var classId = $('#class').attr('classId');
 
 
-	var addWage = function(lastDay) {
+	var addWage = function(lastDay, assign_id) {
 		console.log('in function')
 
 		var num = parseInt($('#numDays').val());
@@ -22,7 +22,7 @@ $('document').ready(function() {
 		
 			var current = lastDay + i;
 			wrapper.append($('<label>Class #' + current + ' Wage</label>'));
-			wrapper.append($('<input type = "Number" id=' + current +' class="form-control wage" value=1>'));
+			wrapper.append($('<input type = "Number" id=' + current +' class="form-control wage' + assign_id + '" value=1>'));
 		}
 
 		wrapper.html();
@@ -31,14 +31,18 @@ $('document').ready(function() {
 	}
 
 	$('#nextButton').click(function(e){
-		var wages = $('.wage');
+		var assign_id = $(this).attr('assign_id');
+
+		console.log(assign_id);
+
+		var wages = $('.wage' + assign_id);
 
 		if(wages.length === 0){
 			e.preventDefault();
 			if(len <= 0){
 				localStorage.classId = 1;
 
-				addWage(1);
+				addWage(1, assign_id);
 
 			} else {
 			$.ajax({type: "POST",
@@ -52,7 +56,7 @@ $('document').ready(function() {
 					localStorage.classId = response.data;
 
 					console.log(localStorage.classId);
-					addWage(parseInt(localStorage.classId));
+					addWage(parseInt(localStorage.classId), assign_id);
 				}
 			})
 			}
