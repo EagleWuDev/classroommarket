@@ -8,7 +8,7 @@ $('document').ready(function() {
 	var classId = $('#class').attr('classId');
 
 
-	var addWage = function(lastDay, assign_id) {
+	var addWage = function(lastDay) {
 		console.log('in function')
 
 		var num = parseInt($('#numDays').val());
@@ -39,7 +39,7 @@ $('document').ready(function() {
 			if(len <= 0){
 				localStorage.classId = 1;
 
-				addWage(1, assign_id);
+				addWage(1);
 
 			} else {
 			$.ajax({type: "POST",
@@ -53,7 +53,7 @@ $('document').ready(function() {
 					localStorage.classId = response.data;
 
 					console.log(localStorage.classId);
-					addWage(parseInt(localStorage.classId), assign_id);
+					addWage(parseInt(localStorage.classId));
 				}
 			})
 			}
