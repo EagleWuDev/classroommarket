@@ -182,10 +182,27 @@
       </div>
       </center>
 
+    {{/each}}
 
+    </div>
+    <center>
+        <button class="btn btn-default assignmentAdd" type="button" data-toggle="modal" data-target="#myModal">Add Assignment</button>
+        <div class="clear"></div>
+        <button class="btn btn-default"><a href="/students/{{classId}}">Add Gronks to Students</a></button>
+    </center>
 
+    {{else}}
+		<center>
+		<h2>You Have No Assignments</h2>
+		<button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal">Add Assignment</button>
+		</center>
 
-        <!-- Modal -->
+    {{/if}}
+		</div>
+	</div>
+</div>
+
+  <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -228,41 +245,6 @@
   </div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    {{/each}}
-
-    </div>
-    <center>
-        <button class="btn btn-default assignmentAdd" type="button" data-toggle="modal" data-target="#myModal">Add Assignment</button>
-        <div class="clear"></div>
-        <button class="btn btn-default"><a href="/students/{{classId}}">Add Gronks to Students</a></button>
-    </center>
-
-    {{else}}
-		<center>
-		<h2>You Have No Assignments</h2>
-		<button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal">Add Assignment</button>
-		</center>
-
-    {{/if}}
-		</div>
-	</div>
-</div>
 
 
 
