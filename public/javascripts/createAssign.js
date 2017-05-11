@@ -12,7 +12,7 @@ $('document').ready(function() {
 		console.log('in function')
 
 		var num = parseInt($('#numDays').val());
-		$('div#days').('display','none');
+		$('div#days').css('display','none');
 		var wrapper = $('<div></div>');
 
 
