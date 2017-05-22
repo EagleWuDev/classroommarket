@@ -33,7 +33,11 @@ router.post('/password_reset', function(req, res, next) {
   User.findOne({'email': req.body.reset_email}).lean().exec(function(error, user){
 
     error ? console.log(error) : console.log(user);
-
+    if(!user){
+      res.render('reset', {
+        error:'That email does not match our record'
+      });
+    } else {
      var from_email = new helper.Email('passwordreset@classroommarket.org');
             var to_email = new helper.Email(user.email);
             var subject = 'Reset Your Password';
@@ -52,16 +56,17 @@ router.post('/password_reset', function(req, res, next) {
               console.log(response.body);
               console.log(response.headers);
               req.logIn(user, function(err) {
-                if (err) { return next(err); }
+                if (err) { 
+                  return next(err); 
+                }
                   User.findByIdAndUpdate(req.user._id, {sessionId: req.session.id}, function(err) {
                       console.log(req.session);
                        res.redirect('/confirm');
                     });
               });
-         })
-
-
-  })
+          })
+    }
+    })
 })
 
 // POST registration page
@@ -103,7 +108,7 @@ router.get('/confirm', function(req, res, next){
     passport.authenticate('local', function(err, user, info) {
       
       if (err) { return next(err); }
-      if (!user) { return res.redirect('/login'); }
+      if (!user) { return res.render('login', {error:'The Email or Password you entered did not match our record'}); }
       req.logIn(user, function(err) {
         if (err) { return next(err); }
         next();
