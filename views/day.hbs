@@ -1,6 +1,37 @@
 <link rel="stylesheet" type="text/css" href="/stylesheets/home.css"/>
 <link rel="stylesheet" type="text/css" href="/stylesheets/class.css">
 <script type="text/javascript" src="/javascripts/addgronks.js"></script>
+<div id="wrapper" class="toggled">
+   <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <h5 class="sidebar-title">
+                      {{name}}
+                  </h5>
+                </li>
+                <li>
+                    <a href="/home"><h3>Home</h3></a>
+                </li>
+                 <li>
+                    <a href="/classRoom/{{classRoomId}}"><h3>Assignments</h3></a>
+                </li>
+                 <li>
+                   <a href="/charts/{{classRoomId}}"><h3>Graphs</h3></a>
+                </li>
+                <li>
+                   <a href="/market_settings/{{classRoomId}}"><h3>Market Settings</h3></a>
+                </li>
+                <li>
+                   <a href="/logout"><h3>Logout</h3></a>
+                </li>
+            </ul>
+        </div>
+
+
+ <div id="page-content-wrapper">
+
+
 {{#if error}}
     <div class="alert alert-danger" role="alert">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -9,34 +40,43 @@
     </div>
 {{/if}}
 
-<div class="header">
-	<div class="container">
-		<div class="col-md-12">
-			<h1>{{name}}</h1>
-			<h3>At {{college}}</h3>
-      <a href="/home"><h5>Go Home</h5></a>
-		</div>
-	</div>
-</div>
 
 
 <div class="main">
+ <a href="#menu-toggle" class="menu" id="menu-toggle"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span></a>
 	<div class="container">
 	<div class="col-md-12">
-		<h1 id= "assignment" assign="{{assignmentId}}" classRoom="{{classRoomId}}" day = "{{day}}" class="secondTitle">{{assignment}} - Day {{number}}</h1>
+		<h1 id= "assignment" assign="{{assignmentId}}" classRoom="{{classRoomId}}" day = "{{day}}" class="secondTitle">{{assignment}}: Day {{number}}</h1>
+
+		<h4>Wage: {{wage}}</h4>
 
 	</div>
 </div>
 
 <div class="clear"></div>
-
+<div class="container">
+<div class="col-md-12">
 	<center>
+	<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>ExtraCredit Earned</th>
+		</tr>
+	</thead>
+	<tbody>
 	{{#each classRoomUser}}
-		{{user.username}}<input type="number" id = "{{user._id}}" name="gronks[]"/>
-
+	<tr>
+		<td>{{user.username}}</td>
+		<td><input type="number" id = "{{user._id}}" name="gronks[]"/></td>
+	</tr>
 
 	{{/each}}
+	</tbody>
+	</table>
 <div class="clear"></div>
 	<button id="giveGronks">Enter Extra Credit</button>
 	</center>
+</div>
+</div>
 </div>

@@ -23,9 +23,11 @@ $('document').ready(function() {
 
 	})
 
-	$('#addExtraCredit').click(function(e){
+	$('.addExtraCredit').click(function(e){
 
-		e.preventDefault();
+		e.preventDefault()
+
+		console.log('in');
 
 		var assignId = $(this).attr('assignId');
 		var amount = $('#extraCreditAdd' + assignId).val();

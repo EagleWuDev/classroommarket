@@ -143,6 +143,9 @@ var assignmentSchema = mongoose.Schema({
 	averageWage: {
 		type: Number,
 		default: 1
+	},
+	lastAssign: {
+		type: Boolean
 	}
 })
 module.exports = {

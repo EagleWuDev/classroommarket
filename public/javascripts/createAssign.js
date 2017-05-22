@@ -4,6 +4,7 @@ $('document').ready(function() {
 	var assigns = $('.assign');
 	console.log(assigns);
 	var len = assigns.length-1;
+	console.log('len', len);
 	var id = $(assigns[len]).attr('id');
 	var classId = $('#class').attr('classId');
 
@@ -36,7 +37,7 @@ $('document').ready(function() {
 
 		if(wages.length === 0){
 			e.preventDefault();
-			if(len <= 0){
+			if(len < 0){
 				localStorage.classId = 1;
 
 				addWage(1);
@@ -66,11 +67,18 @@ $('document').ready(function() {
 				wageArr[i] = [$(wages[i]).attr('id') , $(wages[i]).val()];
 			}
 
+			
+			var e = document.getElementById("assignLast");
+			var assignLast = e.options[e.selectedIndex].value;
+
+		
+
 			$.ajax({type: "POST",
 				data: {
 					'assignName' : $('#assignName').val(),
 					'assignDate' : $('#assignDate').val(),
 					'assignWeight' : $('#assignWeight').val(),
+					'assignLast' : assignLast,
 					'wages' : JSON.stringify(wageArr)
 				},
 				url: '/classRoom/' + classId,
@@ -90,12 +98,20 @@ $('document').ready(function() {
 		var assignId = $(this).attr('assign-id');
 		var dueDate = $('#newAssignDate' + assignId).val();
 		var amount = $('#addAssignDays' + assignId).val();
+		if ($('#assignLast' + assignId).is(":checked"))
+		{
+			var assignLast = true;
+		} else {
+			var assignLast = false;
+		}
 
+		console.log('assignLast', assignLast)
 		$.ajax({type: "POST",
 			data: {
 				'assignId': assignId,
 				'dueDate': dueDate,
 				'wageAmount':amount,
+				'assignLast': assignLast,
 				'classId': classId
 			},
 			url: '/editAssign/' + classId,

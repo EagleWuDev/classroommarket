@@ -37,7 +37,65 @@ button{
 	color: #696969 !important;
 	margin-top: 1vh !important;
 }
-.assignmentAdd{
-	margin-top: 4vh;
 
+.whiteBackground{
+	background-color: #FFF !important;
+	margin-bottom: .5vh;
+}
+.borderRight{
+	border-right: 1px solid black !important;
+}
+.margin-top{
+	margin-top: 2vh;
+}
+.assignmentAdd{
+	background-color: #0066CD !important;
+	padding: 10px;
+	color: #FFF !important;
+	border-radius: 3px;
+}
+.assignmentAdd:hover{
+	background-color: #007BB8 !important;
+}
+.gronksAdd{
+	background-color: #32CD32 !important;
+	padding: 10px;
+	color: #FFF !important;
+	border-radius: 3px;
+}
+.gronksAdd:hover{
+	background-color: #7CFC00 !important;
+}
+.panel-heading{
+	background-color: #FFF !important;
+	background-image: none !important;
+	width: 80%;
+}
+
+.joinClass{
+	color: #FFF !important;
+	border: 1px solid black;
+	border-radius: 3px;
+	background-color: #32CD32 !important;
+	padding: 10px;
+	margin-top: 1vh;
+}
+.joinClass:hover{
+	background-color: #7CFC00 !important;
+}
+.title1{
+	font-size: 1.7em;
+	font-weight: 600;
+}
+.descr1{
+	font-size: 1.5em;
+	color: grey !important;
+}
+.grey {
+	color: #32CD32 !important;
+}
+.descBox{
+	padding: 10px;
+	border: 1px solid black;
+	border-radius: 3px;
 }

@@ -7,20 +7,8 @@ h1{
 	color: #FFF;
 	margin-top: 10vh;
 }
-.main{
-	background-color: #F5F7FA;
-}
-.container{
-	display: flex;
-}
-.left-side{
-	background-color: #FFF;
-	height: 20vh;
-	margin: 1vh;
-	border-radius: 10px;
-	border: 1px solid #E0E0E0;
-	flex: 1;
-}
+
+
 h5{
 	margin-top: 2vh;
 	font-size: 1.5em;
@@ -29,17 +17,24 @@ h5{
 .margin{
 	margin-left: 1.3vw;
 }
+.margin-right{
+	margin-right: 1.3vw;
+}
 .active-class{
 	font-size: 3em;
 }
-
+.notblue{
+	color: #000000;
+}
+.notblue:hover{
+	color: #FFF;
+}
 .right-side{
 	background-color: #FFF;
 	margin: 1vh;
-	height: 30vh;
 	border-radius: 10px;
 	border: 1px solid #E0E0E0;
-	flex: 2;
+	
 }
 .noClass{
 	margin-top: 10vh;
@@ -47,18 +42,25 @@ h5{
 	color: #373837;
 	margin-left: 0;
 }
-.createClass{
-	background-color: #FFF;
-	border: 1px solid black;
-	padding: 10px;
-	border-radius: 10px;
+.createClasses{
+	background-color: #32CD32 !important;
+	color: #FFF !important;
+	border: 1px solid #FFF !important;
+	padding: 10px !important;
+	border-radius: 3px;
+}
+.createClasses:hover{
+	background-color: #006400 !important;
 }
 .classBox{
-	width: 90%;
+	width: 100%;
 	height: auto;
 	border: 1px solid black;
-	border-radius: 10px;
-	padding: 10px;
+	margin-top: 1vh;
+	border-radius: 3px;
+}
+.classBox:hover{
+	background-color: #000000;
 }
 a:hover{
 	text-decoration: none;
@@ -75,6 +77,34 @@ a:hover{
 	border-radius: 10px;
 	margin: 20px;
 
+}
+hr {
+  border: 0;
+  clear:both;
+  display:block;
+  width: 96%;               
+  background-color:#000000;
+  height: 1px;
+  margin-top: 1vh;
+  margin-bottom: 0;
+}
+.red-box{
+	padding: 5px;
+	padding-left: 1vw;
+	background-color: #8b0000;
+	color: #FFF;
+	margin-top: 3vh;
+}
+.warning:hover{
+	background-color: #000000 !important;
+}
+
+.statBox{
+	border: 1px solid black;
+	padding: 10px;
+}
+.statBox h5{
+	color: grey !important;
 }
 
 

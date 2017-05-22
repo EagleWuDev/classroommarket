@@ -1,0 +1,136 @@
+
+<link rel="stylesheet" type="text/css" href="/stylesheets/home.css"/>
+<link rel="stylesheet" type="text/css" href="/stylesheets/class.css"/>
+<div id="wrapper" class="toggled">
+   <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+
+                {{#if user.professor}}
+                    <h5 class="sidebar-title">
+                      Professor {{lastname}}
+                  </h5>
+                  {{else}}
+                  <h5 class="sidebar-title">
+                      {{user.username}}
+                  </h5>
+                  {{/if}}
+                </li>
+                <li>
+                    <a href="/home"><h3>Home</h3></a>
+                </li>
+                 <li>
+                    <h3>Profile Settings</h3>
+                </li>
+            
+                <li>
+                   <a href="/logout"><h3>Logout</h3></a>
+                </li>
+            </ul>
+        </div>
+
+
+ <div id="page-content-wrapper">
+
+{{#if error}}
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+      {{error}}
+    </div>
+{{/if}}
+
+<div class="main">
+    <a href="#menu-toggle" class="menu" id="menu-toggle"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span></a>
+  <div class="container">
+
+    <div class="container">
+
+     <h1 class="secondTitle" id="class" classId = "{{classId}}">Profile Settings</h1>
+
+     <div class="col-md-12">
+     <h3>Name:</h3>
+     <h4>{{user.username}}</h4>
+
+     <h3>Email:</h3>
+     <h4>{{user.email}}</h4>
+
+     <h3></h3>
+     <button class="gronksAdd margin-top" style="float: right" data-toggle="modal" data-target="#editModal">Edit Settings</button>
+     </div>
+
+     <!-- Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Settings</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          <div class="form-group">
+            <label>Edit Name</label>
+            <input type="text" name="name" value="{{user.username}}" class="form-control" />
+          </div>
+          <div class="form-group`">
+            <label>Edit Email</label>
+            <input type="email" name="email" value="{{user.email}}" class="form-control" />
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+       </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+     <div class="clear"></div>
+
+     <div class="col-md-12">
+     <div class="red-box">
+     <h3>WARNING: DANGER ZONE</h3>
+      <button class="warning" data-toggle="modal" data-target="#deleteModal" style="border: 3px solid #ffff00 !important" ><h4 style="color: #ffff00">DELETE ACCOUNT</h4></button>
+      </div>
+     </div>
+    </div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete Account</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete your profile? You will lose all of your data.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <a href="/delete_account"><button type="button" class="btn btn-primary">Yes</button></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+ <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>

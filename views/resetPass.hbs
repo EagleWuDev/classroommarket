@@ -5,21 +5,19 @@
       {{error}}
     </div>
 {{/if}}
+
 <form method="POST" style="max-width: 300px; margin: auto; margin-top: 50px; border: 0.5px solid gray; padding: 30px 30px 30px 30px">
-    <h3>Login</h3>
+    <h3>Reset Your Password</h3>
     <div class="form-group">
-        <label>Email</label>
-        <input type="text" name="username" class="form-control">
+        <label>Enter A New Password</label>
+        <input type="text" name="password" class="form-control">
     </div>
     <div class="form-group">
-        <label>Password</label>
-        <input type="password" name="password" class="form-control">
+        <label>Confirm New Password</label>
+        <input type="text" name="passwordRepeat" class="form-control">
     </div>
     <div class="form-group">
-        <button class="btn btn-success">Login</button>
-        <a class="btn btn-primary" href="/register">Go To Register</a>
-    </div>
-    <div class="form-group">
-        <a href="/password_reset">Forgot Password</a>
+        <button class="btn btn-success">Enter</button>
+        <h4>If you password has been successfully reset, you will automatically be brought to the login page.</h4>
     </div>
 </form>

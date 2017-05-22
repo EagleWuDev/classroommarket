@@ -1,6 +1,40 @@
 <link rel="stylesheet" type="text/css" href="/stylesheets/home.css"/>
 <link rel="stylesheet" type="text/css" href="/stylesheets/class.css"/>
 <script type="text/javascript" src="/javascripts/purchase.js"></script>
+
+<div id="wrapper" class="toggled">
+   <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <h5 class="sidebar-title" id= "className" classId="{{classId}}">
+                      {{name}}
+                  </h5>
+                </li>
+                <li>
+                    <a href="/home"><h3>Home</h3></a>
+                </li>
+                 <li>
+                    <h3>Assignments</h3>
+                </li>
+                 <li>
+                   <a href="/charts/{{classId}}"><h3>Graphs</h3></a>
+                </li>
+                
+                <li>
+                   <a href="/logout"><h3>Logout</h3></a>
+                </li>
+            </ul>
+        </div>
+
+
+ <div id="page-content-wrapper">
+
+
+
+
+
+
 {{#if error}}
     <div class="alert alert-danger" role="alert">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -9,23 +43,33 @@
     </div>
 {{/if}}
 
-<div class="header">
-	<div class="container">
-		<div class="col-md-12">
-			<h1 id="className" classId="{{classId}}" >{{name}}</h1>
-			<h3>At {{college}}</h3>
-      <a href="/home"><h5>Go Home</h5></a>
-		</div>
-	</div>
-</div>
 
 <div class="main">
+<a href="#menu-toggle" class="menu" id="menu-toggle"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span></a>
 	<div class="container">
 		<div class="col-md-12">
-    <h2>Your Current Balance: {{classRoomUser.gronks}} Gronks</h2>
-    <h2>Total Gronks in the Economy: {{totalGronks}}</h2>
-    <h3>You have earned: {{eCRec}} Extra Credit</h3>
-    <h3>Your grade has been impacted by: {{weighted}} Points</h3>
+    <h1 class="secondTitle">Overview</h1>
+
+    <div class="col-md-12 descBox">
+      <h4 class="title1">Your Balance: <span class="grey">{{classRoomUser.gronks}}G </span></h4>
+    </div>
+
+    <div class="col-md-4 descBox">
+      <h4 class="title1">Total ExtraCredit Earned</h4>
+      <h5 class="descr1"><span class="round grey">{{eCRec}}</span></h5>
+    </div>
+
+    <div class="col-md-4 descBox">
+      <h4 class="title1">Total Impact on Grade</h4>
+      <h5 class="descr1"><span class="round grey">{{weighted}} Points</span></h5>
+    </div>
+
+    <div class="col-md-4 descBox">
+      <h4 class="title1">Gronks in Economy</h4>
+      <h5 class="descr1 grey">{{totalGronks}}</h5>
+    </div>
+
+    <div class="clear"></div>
     <h1 class="secondTitle">Assignments</h1>
     {{#if assignments}}
 
@@ -46,12 +90,15 @@
       <div id="collapse{{assignment._id}}" class="panel-collapse collapse">
       <div class="panel-body">
         <h3>{{assignment.name}}</h3>
-         <h4>Due Date: {{assignment.expireAt}}</h4>
+         <h4>Due Date: <span class="dateNice">{{assignment.expireAt}}</span></h4>
          <h5>Weight: {{assignment.weight}}</h5>
          <h5>ExtraCredit {{assignment.extraCredit}}</h5>
          {{#if assignment.active}}
           <h6 class="active">Active</h6>
             <div>
+            {{#if assignment.lastAssign}}
+            <h5>This is the last Assignment. Your entire balance will autospend on this assignment.</h5>
+            {{else}}
             <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal{{assignment._id}}">Buy Extracredit</button>
 
               <!-- Modal -->
@@ -75,9 +122,10 @@
               </div>
            
             </div>
+            {{/if}}
          {{else}}
-          <h6>Not Active</h6>
-          <a href="/assignment/{{assignment._id}}"><h6>Price</h6></a>
+          <h5 style="color: red">Assignment Closed</h5>
+          <a href="/assignment/{{assignment._id}}"><button class="joinClass">See Your Results</button></a>
 
          {{/if}}
       </div>
@@ -97,5 +145,6 @@
     {{/if}}
 		</div>
 	</div>
+</div>
 </div>
 

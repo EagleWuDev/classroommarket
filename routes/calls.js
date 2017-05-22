@@ -75,9 +75,13 @@ router.post('/addGronks', function(req, res, next){
 
 
 router.post('/transaction', function(req, res, next){
+	console.log('userId', req.user.id);
+	console.log('classId', req.body.classId);
 	ClassRoomUser.findOne({user: req.user.id, classRoom: mongoose.Types.ObjectId(req.body.classId)}).exec(function(error, classRoomUser){
-			
-		if(classRoomUser && classRoomUser.gronks > parseInt(req.body.amount)) {
+		console.log('classRoomUser', classRoomUser);
+		console.log('gronks', classRoomUser.gronks);
+		console.log('amount', req.body.amount)
+		if(classRoomUser && classRoomUser.gronks >= parseInt(req.body.amount)) {
 
 			Transaction.findOne({user: req.user.id, assignment: mongoose.Types.ObjectId(req.body.assignId)}).lean().exec(function(er, transaction){
 
@@ -127,8 +131,173 @@ router.post('/calculatePrice', function(req, res, next){
 			res.json({'success': false, 'message': 'nice try buddy, but not today'});
 		} else {
 			
+		Assignment.findById(mongoose.Types.ObjectId(req.body.assignId)).exec(function(error, assign) {
+
+			if(assign.lastAssign){
+
+				
+			ClassRoomUser.find({'classRoom': mongoose.Types.ObjectId(req.body.classId)}).exec(function(error, classRoomUser){
+
+				
+				if (classRoomUser.length > 0) {
+
+					var asyncCall3 = new Promise(function(resolve, reject){
+						console.log('in promise')
+						console.log(classRoomUser);
+						classRoomUser.forEach(function(item1, index){
+							console.log('in forEach')
+							var t = new Transaction({
+								'user': item1.user,
+								'assignment': assign._id,
+								'classRoom': item1.classRoom,
+								'spent': item1.gronks
+							})
+
+							t.save(function(error, trans){
+								console.log('transaction created', trans)
+
+								ClassRoomUser.findOneAndUpdate({'user': item1.user, 'classRoom': item1.classRoom}, {'gronks': 0}, {new: true}).exec(function(error, ret){
+
+									console.log('newClassRoomUser', ret);
+
+									if(index === classRoomUser.length-1) {
+										resolve('all transactions created')
+									}
+
+
+								})
+							})
+						})
+					})
+
+					asyncCall3.then(function(count){
+							Transaction.find({'assignment': mongoose.Types.ObjectId(req.body.assignId)}).lean().exec(function(err, transactions) {
+
+								if (transactions.length > 0) {
+								var total = 0;
+								transactions.forEach(function(item, index) {
+									total+=item.spent;
+								})
+
+								console.log(total);
+
+
+								Assignment.findById(mongoose.Types.ObjectId(req.body.assignId)).exec(function(error, assignment){
+
+									var price = total/assignment.extraCredit;
+									var weighted = price/assignment.weight;
+
+									assignment.price = price;
+									assignment.weightedPrice = weighted;
+									assignment.active = false;
+
+									ClassRoomAssignment.find({'classRoom': mongoose.Types.ObjectId(req.body.classId)}).populate('assignment').sort('assignment.expireAt').lean().exec(function(error, classRoomAssignments){
+
+										for(var i = 0; i < classRoomAssignments.length; i++){
+											if(classRoomAssignments[i].assignment._id + "" === mongoose.Types.ObjectId(req.body.assignId)) {
+												console.log('assignment match found');
+
+												if(i === 0) {
+													assignment.inflation = 0;
+													break;
+												} else {
+													weightedYesterday = classRoomAssignments[i-1].assignment.weightedPrice;
+													console.log('weightedYesterday',weightedYesterday);
+													assignment.inflation = ((weighted - weightedYesterday)/weightedYesterday) * 100;
+													break;
+												}
+											}
+										}
+
+
+										Day.find({'assignment': mongoose.Types.ObjectId(req.body.assignId)}).lean().exec(function(dayerror, days){
+											dayerror ? console.log(error) : console.log(days)
+
+											var sumTotalWage = 0;
+											var sumExtraCredit = 0;
+											var averageWage;
+
+											days.forEach(function(item, index){
+												sumTotalWage+=(item.extraCredit * item.wage);
+												sumExtraCredit+=item.extraCredit;
+											})
+
+											averageWage = (sumTotalWage/sumExtraCredit);
+
+											assignment.averageWage = averageWage;
+
+												assignment.save(function(error, update){
+													error ? console.log(error) : console.log(update)
+
+													var asyncCall1 = new Promise(function(resolve, reject){
+														transactions.forEach(function(item, index){
+															var extraCreditReceived = item.spent/price;
+															var weightedCreditReceived = item.spent/weighted;
+															Transaction.findByIdAndUpdate(item._id, {extraCreditReceived: extraCreditReceived, weightedCreditReceived: weightedCreditReceived}, {new: true}).exec(function(error, transaction){
+																	console.log('transaction updated')
+																	if(index === transactions.length-1){
+																		resolve('done')
+																	}
+															})
+														})
+
+
+													})
+
+													asyncCall1.then(function(done){
+														console.log({'success': true, 'message': 'assignment ended'});
+
+														
+														res.json({'success': true, 'message': 'assignment ended'});
+														
+
+													})
+												});
+
+											})
+
+
+										})
+										})
+
+
+									} else {
+										console.log('in else statement')
+										Assignment.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.assignId), {'active': false, 'inflation': 0, 'price': 0, 'weightedPrice': 0}).exec(function(error, assign){
+
+											console.log({'success': true, 'message': 'assignment ended'});
+												
+											res.json({'success': true, 'message': 'assignment ended'});
+														
+										})
+									}
+
+						}) 
+
+
+
+
+					})
+
+
+
+				} else {
+					console.log('no classRoom Users');
+						Assignment.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.assignId), {'active': false, 'inflation': 0, 'price': 0, 'weightedPrice': 0}).exec(function(error, assign){
+
+											console.log({'success': true, 'message': 'assignment ended'});
+												
+											res.json({'success': true, 'message': 'assignment ended'});
+														
+										})
+
+				}
+
+			})
+			} else {
 			Transaction.find({assignment: mongoose.Types.ObjectId(req.body.assignId)}).lean().exec(function(err, transactions) {
 
+				if (transactions.length > 0) {
 				var total = 0;
 
 				console.log(transactions);
@@ -187,15 +356,29 @@ router.post('/calculatePrice', function(req, res, next){
 								assignment.save(function(error, update){
 									error ? console.log(error) : console.log(update)
 
-									transactions.forEach(function(item, index){
-										var extraCreditReceived = item.spent/price;
-										var weightedCreditReceived = item.spent/weighted;
-										Transaction.findByIdAndUpdate(item._id, {extraCreditReceived: extraCreditReceived, weightedCreditReceived: weightedCreditReceived}, {new: true}).exec(function(error, transaction){
-										console.log('transaction updated')
-										})
-								})
+									var asyncCall1 = new Promise(function(resolve, reject){
+											transactions.forEach(function(item, index){
+												var extraCreditReceived = item.spent/price;
+												var weightedCreditReceived = item.spent/weighted;
+												Transaction.findByIdAndUpdate(item._id, {extraCreditReceived: extraCreditReceived, weightedCreditReceived: weightedCreditReceived}, {new: true}).exec(function(error, transaction){
+														console.log('transaction updated')
+															if(index === transactions.length-1){
+																resolve('done')
+															}
+													})
+											})
 
-								res.json({'success': true, 'message': 'assignment ended'});
+
+									})
+
+									asyncCall1.then(function(done){
+											console.log({'success': true, 'message': 'assignment ended'});
+
+											
+											res.json({'success': true, 'message': 'assignment ended'});
+											
+
+									})
 
 						});
 
@@ -205,12 +388,23 @@ router.post('/calculatePrice', function(req, res, next){
 					})
 				})
 
+
+			} else {
+				console.log('in else statement')
+				Assignment.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.assignId), {'active': false, 'inflation': 0, 'price': 0, 'weightedPrice': 0}).exec(function(error, assign){
+
+					res.json({'success': true, 'message': 'assignment ended'});
+				})
+			}
+
 			}) 
 
 
 		}
 
 
+	})
+	}
 	})
 })
 
@@ -245,47 +439,88 @@ router.post('/classRoom/:id', function(req, res, next){
 	console.log(req.body, 'req.body');
 
 	var wages = JSON.parse(req.body.wages);
+	if (req.body.assignLast === "true") {
+		var last = true;
+	} else {
+		var last = false;
+	}
+
 
 	var lastDay = parseInt(wages[wages.length-1][0])+1;
-
+	console.log(lastDay);
 	var assign = new Assignment({
 		name: req.body.assignName,
 		expireAt: req.body.assignDate,
 		active: true,
 		weight: req.body.assignWeight,
-		lastDay: lastDay
+		lastDay: lastDay,
+		lastAssign: last
 	})
 
 	assign.save(function(error, assign){
 		error ? console.log(error) : null
 
-		var classRoomAssign = new ClassRoomAssignment({
-			classRoom: req.params.id,
-			assignment: assign._id
-		})
+	ClassRoomAssignment.find({'classRoom': req.params.id}).populate('assignment').exec(function(error, classRoomAssigns) {
+		console.log(classRoomAssigns);
+		var asyncCall = new Promise(function(resolve, reject) {
+		if(classRoomAssigns.length > 0){
+			classRoomAssigns.forEach(function(item, index){
+				console.log('in loop');
+				console.log(item.assignment.lastAssign);
+				if(item.assignment.lastAssign && last) {
+					Assignment.findByIdAndUpdate(item.assignment._id,{'lastAssign': false}).exec(function(error, classRoomAssign){
+							if(index === classRoomAssigns.length-1) {
+									resolve('done')
+								}
+					})
+				} else {
+					if(index === classRoomAssigns.length-1) {
+						console.log('resolving');
+							resolve('done')
+					}
+				}
 
-		classRoomAssign.save(function(error, cRA){
-			error ? console.log(error) : null
 
-			wages.forEach(function(item, index){
-				var day = new Day({
-					classRoom: req.params.id,
-					assignment: assign._id,
-					number: item[0],
-					active: true,
-					wage: item[1]
-				})
-
-				day.save(function(error, day){
-					error ? console.log(error) : null
-				})
 			})
-			res.send({'success': true, data: 'good'});
-		})
-
+		} else {
+			resolve('done');
+		}
 	})
 
+			asyncCall.then(function(count){
+				console.log('in resolve statement')
+				var classRoomAssign1 = new ClassRoomAssignment({
+					classRoom: req.params.id,
+					assignment: assign._id
+				})
+
+				console.log('classRoomAssign1', classRoomAssign1)
+				classRoomAssign1.save(function(error, cRA){
+					error ? console.log(error) : console.log('CRA',cRA)
+					console.log('in here 1.5');
+					console.log('work')
+					wages.forEach(function(item, index){
+						var day = new Day({
+							classRoom: req.params.id,
+							assignment: assign._id,
+							number: item[0],
+							active: true,
+							wage: item[1]
+						})
+
+					day.save(function(error, day){
+						error ? console.log(error) : null
+						})
+					})
+				console.log('in here 2')
+				res.send({'success': true, data: 'good'});
+			})		
+		})
+	})
+
+	})
 })
+
 
 router.post('/addExtraCreditAssign', function(req, res, next){
 	console.log('body',req.body);
@@ -347,7 +582,127 @@ router.post('/editAssign/:id', function(req, res, next){
 		if(classRoom.owner + "" !== req.user.id+""){
 			res.json({'success': false, "message": 'Not yo ClassRoom!!'})
 		} else {
-			if(req.body.dueDate) {
+
+			if(req.body.assignLast === "true"){
+				var last = true;
+				console.log('last', last);
+			} else {
+				var last = false;
+			}
+
+			if (last) {
+
+				if(req.body.dueDate){
+					Assignment.findByIdAndUpdate(assignId, {'lastAssign': true, 'expireAt': new Date(req.body.dueDate)}, {new: true}).exec(function(error, assign) {
+						ClassRoomAssignment.find({'classRoom': classId}).populate('assignment').exec(function(error, classRoomAssigns) {
+							console.log('assign', assign)
+							var asyncCall = new Promise(function(resolve, reject) {
+								if(classRoomAssigns.length > 0){
+									classRoomAssigns.forEach(function(item, index){
+										if(item.assignment.lastAssign && item.assignment._id+"" !== assignId+"") {
+											Assignment.findByIdAndUpdate(item.assignment._id,{'lastAssign': false}).exec(function(error, classRoomAssign){
+												if(index === classRoomAssigns.length-1) {
+													resolve('done')
+												}
+											})
+										} else {
+											if(index === classRoomAssigns.length-1) {
+												console.log('resolving');
+												resolve('done')
+											}
+										}
+									})
+								} else {
+									resolve('done');
+								}
+							})
+
+							asyncCall.then(function(count) {
+
+								if(req.body.wageAmount) {
+									var d = new Day({
+										classRoom: classId,
+										assignment: assign._id,
+										number: assign.lastDay,
+										active: true,
+										wage: parseInt(req.body.wageAmount)
+								})
+
+									d.save(function(error, day){
+										error ? console.log(error) : null
+										Assignment.findByIdAndUpdate(assignId, {$inc: {lastDay: 1}}).exec(function(error, assign1){
+											res.json({'success': true, "message": "Updated"})
+										})
+									});
+
+								} else {
+									res.json({'success': true, "message": "Updated"})
+								}
+						})
+					})
+				})
+				} else {
+
+					Assignment.findByIdAndUpdate(assignId, {lastAssign: true}, {new: true}).exec(function(error1, assign1) {
+						if(error){
+							console.log(error)
+						}
+						console.log('assign', assign1)
+							ClassRoomAssignment.find({'classRoom': classId}).populate('assignment').exec(function(error, classRoomAssigns) {
+							var asyncCall = new Promise(function(resolve, reject) {
+								if(classRoomAssigns.length > 0){
+									classRoomAssigns.forEach(function(item, index){
+										if(item.assignment.lastAssign && last && item.assignment._id+"" !== assignId + "") {
+											Assignment.findByIdAndUpdate(item.assignment._id,{'lastAssign': false}).exec(function(error, classRoomAssign){
+												if(index === classRoomAssigns.length-1) {
+													resolve('done')
+												}
+											})
+										} else {
+											if(index === classRoomAssigns.length-1) {
+												console.log('resolving');
+												resolve('done')
+											}
+										}
+									})
+								} else {
+									resolve('done');
+								}
+							})
+
+							asyncCall.then(function(count) {
+
+								if(req.body.wageAmount) {
+									var d = new Day({
+										classRoom: classId,
+										assignment: assign._id,
+										number: assign.lastDay,
+										active: true,
+										wage: parseInt(req.body.wageAmount)
+								})
+
+								d.save(function(error, day){
+									error ? console.log(error) : null
+									Assignment.findByIdAndUpdate(assignId, {$inc: {lastDay: 1}}).exec(function(error, assign1){
+										res.json({'success': true, "message": "Updated"})
+									})
+								});
+
+								} else {
+									res.json({'success': true, "message": assign1.lastAssign})
+								}
+
+
+
+						})
+					})
+
+
+
+					})
+				}
+			}
+			else if(req.body.dueDate) {
 				Assignment.findByIdAndUpdate(assignId, {expireAt: new Date(req.body.dueDate)}, {new: true}).exec(function(error, assign){
 					console.log('update', assign)
 

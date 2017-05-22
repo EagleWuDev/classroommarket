@@ -8,6 +8,7 @@ var ClassRoomAssignment = require('../models/models').ClassRoomAssignment;
 var Day = require('../models/models').Day;
 var Transaction = require('../models/models').Transaction;
 var Helpers = require('handlebars-helpers');
+var helper = require('sendgrid').mail;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -86,7 +87,7 @@ router.get('/classRoom/:id', function(req, res, next){
 
 	if(classRoom.owner + "" === req.user.id + "") {
 	
-		ClassRoomAssignment.find({"classRoom":req.params.id}).populate('assignment').sort('assignment.expireAt').lean().exec(function(err, assignments){
+		ClassRoomAssignment.find({"classRoom":req.params.id}).populate('assignment').lean().exec(function(err, assignments){
 			var assignmentRet = [];
 
 			var asyncCall = new Promise(function(resolve, reject){
@@ -111,16 +112,17 @@ router.get('/classRoom/:id', function(req, res, next){
 
 				var totalEC = 0;
 		
-				if(classRoom.owner + "" === req.user.id + ""){
-
 						assignmentRet.sort(function(a,b){
 							return new Date("" + b.assignment.assignment.expireAt) - new Date("" + a.assignment.assignment.expireAt)
 						})
 
 						assignmentRet.reverse();
 
-					
+
+						
 						assignmentRet.forEach(function(item, index){
+							console.log(item.assignment.assignment.expireAt);
+
 							if (item.assignment.assignment.active) {
 								totalEC = totalEC + item.assignment.assignment.extraCredit;
 							}
@@ -167,16 +169,20 @@ router.get('/classRoom/:id', function(req, res, next){
 
 							})
 						})
-				} else {
-					res.send('fuckkkkk')
-				}
+				
 			})
 		})
 	} else {
 
 	ClassRoomUser.find({'user' : req.user.id, 'classRoom' : req.params.id}).exec(function(error, classroomUser){
-		ClassRoomAssignment.find({"classRoom": req.params.id}).populate('assignment').sort('assignment.expireAt').lean().exec(function(err, assignments){
-		
+		ClassRoomAssignment.find({"classRoom": req.params.id}).populate('assignment').lean().exec(function(err, assignments){
+			
+			ret = assignments.sort(function(a,b){
+							return new Date("" + b.assignment.expireAt) - new Date("" + a.assignment.expireAt)
+				 })
+
+				ret.reverse();
+
 			if(classroomUser.length > 0){
 				
 				var count = 0;
@@ -205,7 +211,7 @@ router.get('/classRoom/:id', function(req, res, next){
 								name: classRoom.name,
 								totalGronks: count,
 								college: classRoom.college,
-								assignments: assignments,
+								assignments: ret,
 								classRoomUser: classroomUser[0],
 								eCRec: extraCreditRec,
 								weighted: weightCreditRec, 
@@ -222,7 +228,9 @@ router.get('/classRoom/:id', function(req, res, next){
 							name: classRoom.name,
 							id: classRoom._id,
 							college: classRoom.college,
-							assignments: assignments
+							professor: classRoom.professor,
+							createdAt: classRoom.createdAt,
+							assignments: ret
 						});
 
 		    	
@@ -260,6 +268,7 @@ router.get('/day/:id', function(req, res, next){
 				assignmentId: day.assignment._id,
 				number: day.number,
 				day: day._id,
+				wage: day.wage,
 				classRoomUser: classRoomUser
 			})
 
@@ -271,6 +280,8 @@ router.get('/day/:id', function(req, res, next){
 
 router.get('/assignment/:id', function(req, res, next){
 
+	ClassRoomAssignment.findOne({'assignment': req.params.id}).populate('classRoom').lean().exec(function(error, classRoomAssignment){
+		console.log('classRoomAssign', classRoomAssignment.classRoom);
 	Assignment.findById(req.params.id).lean().exec(function(error, assignment){
 		Transaction.findOne({'assignment': req.params.id, 'user': req.user.id}).populate('user').lean().exec(function(error1, transaction){
 			console.log(transaction)
@@ -284,7 +295,8 @@ router.get('/assignment/:id', function(req, res, next){
 				inflation: assignment.inflation,
 				price: assignment.price,
 				weightedPrice: assignment.weightedPrice,
-				transaction: transaction
+				transaction: transaction,
+				classRoom: classRoomAssignment.classRoom
 				})
 			} else {
 					Transaction.find({'assignment': req.params.id}).populate('user classRoom').lean().exec(function(error2, transactions){
@@ -292,7 +304,7 @@ router.get('/assignment/:id', function(req, res, next){
 						console.log(assignment);
 						console.log("transactions", transactions);
 
-						if(transactions[0].classRoom.owner + "" === req.user.id){
+						if(transactions.length > 0 && transactions[0].classRoom.owner + "" === req.user.id){
 							res.render('assign', {
 								name: assignment.name,
 								weight: assignment.weight,
@@ -301,7 +313,8 @@ router.get('/assignment/:id', function(req, res, next){
 								inflation: assignment.inflation,
 								price: assignment.price,
 								weightedPrice: assignment.weightedPrice,
-								transactions: transactions
+								transactions: transactions,
+								classRoom: classRoomAssignment.classRoom
 							})
 						} else {
 							res.render('assignnil', {
@@ -311,7 +324,8 @@ router.get('/assignment/:id', function(req, res, next){
 								supply: assignment.extraCredit,
 								inflation: assignment.inflation,
 								price: assignment.price,
-								weightedPrice: assignment.weightedPrice
+								weightedPrice: assignment.weightedPrice,
+								classRoom: classRoomAssignment.classRoom
 							})
 						}
 
@@ -322,6 +336,7 @@ router.get('/assignment/:id', function(req, res, next){
 		})
 
 	})
+})
 
 })
 
@@ -347,6 +362,11 @@ router.get('/students/:id', function(req, res, next){
 router.get('/charts/:id', function(req, res, next){
 
 	ClassRoom.findById(req.params.id).lean().exec(function(error, classRoom){
+		if(req.user.id + "" === classRoom.owner +"") {
+			var owner = true;
+		} else {
+			var owner = false;
+		}
 		ClassRoomAssignment.find({'classRoom': req.params.id}).populate('assignment').lean().exec(function(error1, classRoomAssigns){
 			
 			classRoomAssigns.sort(function(a,b){
@@ -377,7 +397,9 @@ router.get('/charts/:id', function(req, res, next){
 				averageWage: averageWage,
 				inflation: inflation,
 				weightedPrice: weightedPrice,
-				labels: labels
+				labels: labels,
+				classId: classRoom._id,
+				owner: owner
 			})
 
 		})
@@ -387,7 +409,6 @@ router.get('/charts/:id', function(req, res, next){
 router.get('/delete/:id', function(req, res, next){
 	Assignment.findById(req.params.id).remove().exec(function(error, assign){
 		ClassRoomAssignment.find({"assignment" : req.params.id}).exec(function(error, classRoomAssignment){
-			console.log(classRoomAssignment);
 			classId = classRoomAssignment[0].classRoom;
 			Day.find({"assignment" : req.params.id}).remove().exec(function(error, days){
 				ClassRoomAssignment.find({"assignment": req.params.id}).remove().exec(function(error, stuff){
@@ -397,5 +418,179 @@ router.get('/delete/:id', function(req, res, next){
 		})
 	})
 })
+
+router.get('/settings', function(req, res, next){
+	User.findById(req.user.id).lean().exec(function(error, user){
+		lastname = user.username.split(' ').slice(-1).join(' ');
+		console.log(user);
+		res.render('profileset', {
+			user: user,
+			lastname: lastname
+		})
+	})
+})
+
+router.post('/settings', function(req, res, next){
+	User.findByIdAndUpdate(req.user.id, {'username' : req.body.name, 'email': req.body.email}).exec(function(error, user){
+
+		res.redirect('/settings')
+
+	})
+})
+
+router.get('/market_settings/:id', function(req, res, next) {
+	ClassRoom.findById(req.params.id).populate('owner').exec(function(error, classRoom) {
+		console.log('classRoom', classRoom);
+
+		res.render('marketset', {
+			name: classRoom.name,
+			classId: classRoom._id,
+			college: classRoom.college,
+			professor: classRoom.professor
+		})
+
+
+	})
+})
+
+router.post('/market_settings/:id', function(req, res, next) {
+	ClassRoom.findById(req.params.id).exec(function(error, classRoom){
+		if (classRoom.owner + "" === req.user.id + "") {
+			ClassRoom.findByIdAndUpdate(req.params.id, {name: req.body.name, college: req.body.college}).exec(function(error, classRoom1){
+
+				res.redirect('/market_settings/' + classRoom._id);
+			})
+		} else {
+			res.render('marketset', {
+				error: 'You do no own this classroom'
+			})
+		}
+	})
+})
+
+router.get('/delete_account', function(req, res, next){
+	User.findById(req.user.id).exec(function(error, user) {
+		if(user.professor){
+			ClassRoom.find({'owner': req.user.id}).exec(function(error, classRooms) {
+				var asyncCall = new Promise(function(resolve,reject){
+					classRooms.forEach(function(item, index){
+						ClassRoomUser.find({'classRoom': item._id}).remove().exec(function(error, classRoomUser) {
+							Day.find({'classRoom': item._id}).remove().exec(function(error, day){
+								Transaction.find({'classRoom': item._id}).remove().exec(function(error, day){
+									ClassRoomAssignment.find({'classRoom':item._id}).exec(function(error, classRoomAssign){
+
+
+										var asyncCall1 = new Promise(function(resolve1, reject1){
+											classRoomAssign.forEach(function(item1, index1){
+												Assignment.findById(item1.assignment).remove().exec(function(error, assign){
+													if(index1 === classRoomAssign.length-1){
+														resolve1('assignments deleted')
+													}
+												})
+											})
+										})
+
+										asyncCall1.then(function(resolve1){
+											ClassRoomAssignment.find({'classRoom': item._id}).remove().exec(function(error, classRA){
+												if(index === classRooms.length-1){
+													resolve('deleted all prelim')
+												}
+
+											})
+											
+
+										})
+
+									})
+								})
+							})
+						})
+					})
+				})
+
+				asyncCall.then(function(resolve){
+					ClassRoom.find({'owner': req.user.id}).remove().exec(function(error, classRooms1){
+						User.findById(req.user.id).remove().exec(function(error, user){
+							console.log('user deleted');
+							res.render('login', {
+								error: "Your Account has Been Deleted"
+							})
+						})
+					})
+				})
+			})
+		} else {
+			Transaction.find({'user':req.user.id}).remove().exec(function(error, trans){
+				ClassRoomUser.find({'user': req.user.id}).remove().exec(function(error, classRoomUser){
+					User.findById(req.user.id).remove().exec(function(error, user){
+						console.log('user deleted');
+							res.render('login', {
+								error: "Your Account has Been Deleted"
+							})
+					})
+				})
+			})
+		}
+	})
+})
+
+router.get('/delete_class/:id', function(req, res, next){
+	ClassRoom.findById(req.params.id).exec(function(error, classRoom){
+		if(classRoom.owner +"" === req.user.id + ""){
+			ClassRoomUser.find({'classRoom': req.params.id}).remove().exec(function(error, classRoomUser){
+
+				Day.find({'classRoom': req.params.id}).remove().exec(function(error, days) {
+
+					Transaction.find({'classRoom': req.params.id}).remove().exec(function(error, transaction){
+
+						ClassRoom.findById(req.params.id).remove().exec(function(error, classRoom1){
+
+							ClassRoomAssignment.find({'classRoom' : req.params.id}).exec(function(error, classRoomAssigns){
+
+								console.log('classRoomAssigns', classRoomAssigns);
+
+								var asyncCall = new Promise(function(resolve, reject){
+
+									if(classRoomAssigns.length === 0) {
+										resolve(classRoomAssigns);
+									} else {
+
+
+									classRoomAssigns.forEach(function(item, index){
+										Assignment.findById(item.assignment).remove().exec(function(err2, assign){
+											if(index === classRoomAssigns.length-1){
+												resolve(classRoomAssigns);
+											}	
+										})
+									})
+									}
+								})
+
+								asyncCall.then(function(classRoomAssigns){
+									console.log('resolved');
+									ClassRoomAssignment.find({'classRoom': req.params.id}).remove().exec(function(error, classRoomAss) {
+
+											res.redirect('/home')
+
+									})
+								})
+
+
+
+
+							})
+
+						})
+
+					})
+
+				})
+
+
+			})
+		}
+	})
+})
+
 
 module.exports = router;
