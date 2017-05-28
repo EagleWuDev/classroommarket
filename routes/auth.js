@@ -41,7 +41,7 @@ router.post('/password_reset', function(req, res, next) {
      var from_email = new helper.Email('passwordreset@classroommarket.org');
             var to_email = new helper.Email(user.email);
             var subject = 'Reset Your Password';
-            var content = new helper.Content('text/plain', 'Hi ' + user.username+ '! Click this link to reset your password: ' + ' http://localhost:3000/password_reset_confirm/' + user._id);
+            var content = new helper.Content('text/plain', 'Hi ' + user.username+ '! Click this link to reset your password: ' + ' http://www.classroommarkets.com/password_reset_confirm/' + user._id);
             var mail = new helper.Mail(from_email, subject, to_email, content);
 
             var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
