@@ -105,6 +105,7 @@ router.get('/confirm', function(req, res, next){
   // POST Login page
   // Custom handler, to handle the verify case.
   router.post('/login', function(req, res, next) {
+    console.log('body', req.body);
     passport.authenticate('local', function(err, user, info) {
       
       if (err) { return next(err); }
