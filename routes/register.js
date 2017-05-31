@@ -33,7 +33,7 @@ router.post('/register', function(req, res, next) {
   }
 
   // Don't create duplicate users
-  User.findOne({email: req.body.email}, function(err, user) {
+  User.findOne({email: req.body.email.toLowerCase()}, function(err, user) {
     if (err) return next(err);
     if (user)
       return res.render('register', {
@@ -52,7 +52,7 @@ router.post('/register', function(req, res, next) {
     //save a new user to dB
 		var u = new User({
 		      username: req.body.username,
-		      email: req.body.email,
+		      email: req.body.email.toLowerCase(),
 		      password: req.body.password,
           professor: professor,
           verified: false,
