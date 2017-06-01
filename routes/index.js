@@ -12,7 +12,7 @@ var helper = require('sendgrid').mail;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index');
+  res.redirect('/login');
 });
 
 /* USE YUUUUUGGGEEE WALLLLLLLLLLLL */

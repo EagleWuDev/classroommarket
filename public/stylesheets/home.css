@@ -1,3 +1,7 @@
+@font-face {
+	font-family: "Helvetica";
+	src: url('helveticalight.ttf');
+}
 .header{
 	width: 100vw;
 	height: 30vh;
@@ -7,7 +11,17 @@ h1{
 	color: #FFF;
 	margin-top: 10vh;
 }
-
+.hell{
+	font-family: "Helvetica" !important
+}
+.chart{
+	background: url("../images/chart.jpg");
+	background-size: contain;
+	background-position: center;
+	height: 80vh;
+	background-repeat: no-repeat;
+	background-position: center 50%;
+}
 
 h5{
 	margin-top: 2vh;
