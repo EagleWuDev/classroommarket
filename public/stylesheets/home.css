@@ -7,13 +7,28 @@
 	height: 30vh;
 	background: linear-gradient(-90deg, #373837, #5a5c5a);
 }
+.back{
+	display: none;
+}
 h1{
 	color: #FFF;
 	margin-top: 10vh;
 }
+.insufficientId{
+	display: none;
+}
 .hell{
 	font-family: "Helvetica" !important
 }
+.arrow-down {
+  width: 0; 
+  height: 0; 
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  
+  border-top: 10px solid #000000;
+}
+
 .chart{
 	background: url("../images/chart.jpg");
 	background-size: contain;

@@ -39,10 +39,13 @@ $('document').ready(function() {
 			e.preventDefault();
 			if(len < 0){
 				localStorage.classId = 1;
-
+				console.log('in here')
+				$('.back').fadeIn();
 				addWage(1);
 
 			} else {
+			console.log('in here')
+			$('.back').fadeIn();
 			$.ajax({type: "POST",
 				data: {
 					'id' : id,
@@ -90,7 +93,11 @@ $('document').ready(function() {
 		}
 	})
 
-
+	$(".back").click(function(e){
+		$('div#doge').empty();
+		$('div#days').css('display', 'block')
+		$('.back').fadeOut();
+	})
 
 	$('.nextButton1').click(function(e){
 		e.preventDefault();

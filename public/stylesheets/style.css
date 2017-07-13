@@ -8,6 +8,11 @@ body {
 	padding: 10px;
 	font-size: 1.3em;
 }
+footer{
+	height: 25vh;
+	background-color: grey;
+	
+}
 .greenBtn{
 	border-color: #006400;
 	color: #006400;

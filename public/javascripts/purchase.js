@@ -22,9 +22,20 @@ $(document).ready(function(e){
 			    	if(response.success){
 			    		window.location.replace("/classRoom/"+classId);
 			    	}
+			    	else {
+			    		$(".insufficientId").css("display","block");
+			    	}
 			    }
 
 		})
 		
 	})
+
+	$('.modal').on('hidden.bs.modal', function(e) {
+		$(".insufficientId").css("display","none");
+	})
+
+
+
+
 })

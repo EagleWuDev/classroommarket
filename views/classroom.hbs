@@ -68,6 +68,7 @@
 
 
     <div class="panel-group" id="accordian">
+        <h6>Click Assignment Names to Drop Down More Options</h6>
 
     {{#each assignments}}
 
@@ -76,7 +77,8 @@
       <div class="panel panel-default">
       <div class="panel-heading">
         <h4 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordian" href="#collapse{{assignment._id}}">{{assignment.assignment.name}}</a>
+          <a data-toggle="collapse" data-parent="#accordian" href="#collapse{{assignment._id}}">{{assignment.assignment.name}} </a>
+          <div class="arrow-down"></div>
           </h4>
           <div class="assign" id="{{assignment.assignment._id}}"></div>
       </div>
@@ -97,7 +99,30 @@
 
          {{#if assignment.assignment.active}}
           <h6 class="active">Active</h6>
-          <button class="end_assignment" assignId="{{assignment.assignment._id}}">End Assignment Manually</button>
+          <button class="btn-default" type="button" data-toggle="modal" data-target="#endAssign{{assignment.assignment._id}}">End Assignment Manually</button>
+
+           <div class="modal fade" id="endAssign{{assignment.assignment._id}}" tabindex="-1" role="dialog" aria-labelledby="addCreditModalLabel{{assignment.assignment._id}}">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      <h4 class="modal-title" id="myModalLabel">Are you sure you want to End {{assignment.assignment.name}}?</h4>
+                    </div>
+                    <div class="modal-body">
+                   
+              
+                          <button class="end_assignment" assignId="{{assignment.assignment._id}}">End Assignment</button>
+
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
           <button class="btn-default" type="button" data-toggle="modal" data-target="#addCreditModal{{assignment.assignment._id}}">Add Extra Credit Manually</button>
              <div>
              <hr>
@@ -274,22 +299,27 @@
 
          <div class="form-group">
           <label>Assignment Weight (Out of 1)</label>
+          <h6>Out of 1, what percent of a student's grade is this assignment worth?</h6>
           <input type="Number" step="0.01" class="form-control" id="assignWeight">
         </div>
 
-        <div class="form-group" id="doge">
-          <label>Last Assignment?</label>
+        <div class="form-group">
+        <label>Last Assignment?</label>
           <h6>When the last assignment closes, all student's gronk balance will be dumped. The Current Last assignment will no longer be tagged as the last assignment</h6>
-            <select class="form-control" name="last" id="assignLast" >
+            <select class="form-control" name="last" id="assignLaest" >
             <option value="false">No</option>
             <option value="true">Yes</option>
             </select>
         </div>
 
+        <div class="form-group" id="doge">
+         
+        </div>
+
         <div class="form-group" id="days">
           <label>Add Class Days</label>
           <p>Enter in the Number of Class Days to be Associated with this Assignment</p>
-          <input type="Number" name="assignDays" id = "numDays" class="form-control">
+          <input type="Number" required="true" name="assignDays" id = "numDays" class="form-control">
         </div>
 
 
@@ -297,7 +327,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" id = "nextButton" assign_id={{assignment.assignment._id}} class="btn btn-primary">Next</button>
+        <button type="button" class="btn btn-default back">Back</button>
+        <button type="submit" id = "nextButton" assign_id={{assignment.assignment._id}} class="btn btn-default">Next</button>
         </form>
       </div>
     </div>
