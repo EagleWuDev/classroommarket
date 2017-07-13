@@ -72,6 +72,7 @@ $('document').ready(function() {
 
 			
 			var e = document.getElementById("assignLast");
+			console.log(e)
 			var assignLast = e.options[e.selectedIndex].value;
 
 		
