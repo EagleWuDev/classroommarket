@@ -198,13 +198,20 @@ router.post('/calculatePrice', function(req, res, next){
 												console.log('assignment match found');
 
 												if(i === 0) {
+
 													assignment.inflation = 0;
 													break;
 												} else {
 													weightedYesterday = classRoomAssignments[i-1].assignment.weightedPrice;
 													console.log('weightedYesterday',weightedYesterday);
-													assignment.inflation = ((weighted - weightedYesterday)/weightedYesterday) * 100;
-													break;
+													if (weightedYesterday === undefined){
+														console.log('no weightedYesterday')
+														assignment.inflation = 0;
+														break;
+													} else {
+														assignment.inflation = ((weighted - weightedYesterday)/weightedYesterday) * 100;
+														break;
+													}
 												}
 											}
 										}
@@ -319,15 +326,27 @@ router.post('/calculatePrice', function(req, res, next){
 					assignment.active = false;
 
 					ClassRoomAssignment.find({classRoom: mongoose.Types.ObjectId(req.body.classId)}).populate('assignment').sort('assignment.expireAt').lean().exec(function(error, classRoomAssignments){
+						console.log('in here');
+						console.log('classroomassigns', classRoomAssignments);
+
+						classRoomAssignments.sort(function(a,b){
+							return new Date("" + b.assignment.expireAt) - new Date("" + a.assignment.expireAt)
+						})
+
+						classRoomAssignments.reverse();
+
+						console.log('classroomassigns', classRoomAssignments);
 
 						for(var i = 0; i < classRoomAssignments.length; i++){
 							if(classRoomAssignments[i].assignment._id + "" === req.body.assignId) {
 								console.log('assignment match found');
-
+								console.log('i', i)
 								if(i === 0) {
+									console.log('in if')
 									assignment.inflation = 0;
 									break;
 								} else {
+									console.log('in else')
 									weightedYesterday = classRoomAssignments[i-1].assignment.weightedPrice;
 									console.log('weightedYesterday',weightedYesterday);
 									assignment.inflation = ((weighted - weightedYesterday)/weightedYesterday) * 100;
