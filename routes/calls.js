@@ -205,7 +205,8 @@ router.post('/calculatePrice', function(req, res, next){
 										console.log('classroomassigns', classRoomAssignments);
 
 										for(var i = 0; i < classRoomAssignments.length; i++){
-											if(classRoomAssignments[i].assignment._id + "" === mongoose.Types.ObjectId(req.body.assignId)) {
+											console.log('in for loop')
+											if(classRoomAssignments[i].assignment._id + "" === req.body.assignId) {
 												console.log('assignment match found');
 
 
