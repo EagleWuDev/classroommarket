@@ -193,9 +193,21 @@ router.post('/calculatePrice', function(req, res, next){
 
 									ClassRoomAssignment.find({'classRoom': mongoose.Types.ObjectId(req.body.classId)}).populate('assignment').sort('assignment.expireAt').lean().exec(function(error, classRoomAssignments){
 
+											console.log('in here');
+											console.log('classroomassigns', classRoomAssignments);
+
+											classRoomAssignments.sort(function(a,b){
+												return new Date("" + b.assignment.expireAt) - new Date("" + a.assignment.expireAt)
+											})
+
+											classRoomAssignments.reverse();
+
+										console.log('classroomassigns', classRoomAssignments);
+
 										for(var i = 0; i < classRoomAssignments.length; i++){
 											if(classRoomAssignments[i].assignment._id + "" === mongoose.Types.ObjectId(req.body.assignId)) {
 												console.log('assignment match found');
+
 
 												if(i === 0) {
 
