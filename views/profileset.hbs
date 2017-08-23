@@ -9,11 +9,11 @@
 
                 {{#if user.professor}}
                     <h5 class="sidebar-title">
-                      Professor {{lastname}}
+                      Professor {{user.lastName}}
                   </h5>
                   {{else}}
                   <h5 class="sidebar-title">
-                      {{user.username}}
+                      {{user.firstName}} {{user.lastName}}
                   </h5>
                   {{/if}}
                 </li>
@@ -51,7 +51,7 @@
 
      <div class="col-md-12">
      <h3>Name:</h3>
-     <h4>{{user.username}}</h4>
+     <h4>{{user.firstName}} {{user.lastName}}</h4>
 
      <h3>Email:</h3>
      <h4>{{user.email}}</h4>
@@ -73,8 +73,12 @@
       <div class="modal-body">
         <form method="post">
           <div class="form-group">
-            <label>Edit Name</label>
-            <input type="text" name="name" value="{{user.username}}" class="form-control" />
+            <label>Edit First Name</label>
+            <input type="text" name="firstName" value="{{user.firstName}}" class="form-control" />
+          </div>
+           <div class="form-group">
+            <label>Edit Last Name</label>
+            <input type="text" name="lastName" value="{{user.lastName}}" class="form-control" />
           </div>
           <div class="form-group`">
             <label>Edit Email</label>

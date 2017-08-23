@@ -208,8 +208,6 @@ router.post('/calculatePrice', function(req, res, next){
 											console.log('in for loop')
 											if(classRoomAssignments[i].assignment._id + "" === req.body.assignId) {
 												console.log('assignment match found');
-
-
 												if(i === 0) {
 
 													assignment.inflation = 0;

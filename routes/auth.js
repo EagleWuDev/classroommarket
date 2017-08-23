@@ -25,7 +25,8 @@ module.exports = function(passport, mongoStore) {
       });
     }
   }
-  router.get('/password_reset', function(req, res, next) {
+
+router.get('/password_reset', function(req, res, next) {
   res.render('reset')
 })
 

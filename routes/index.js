@@ -35,10 +35,9 @@ router.get('/home', function(req, res, next){
 
 		if (user.professor){
 		ClassRoom.find({"owner": req.user.id}).sort('createdAt').exec(function(error, classRoom){
-			console.log("classrooms", classRoom)
-					lastname = user.username.split(' ').slice(-1).join(' ');
+		
 						res.render('homeprof', {
-							name: lastname,
+							name: user.lastName,
 							activeNum: classRoom.length,
 							classRoom: classRoom
 						})
@@ -49,7 +48,8 @@ router.get('/home', function(req, res, next){
 
 					console.log('classRoomUsers', classRoomUser)
 					res.render('homestu', {
-						name: user.username,
+						firstName: user.firstName,
+						lastName: user.lastName,
 						classRoomUser: classRoomUser,
 						activeNum: classRoomUser.length
 					})
@@ -69,7 +69,7 @@ router.post('/home', function(req, res, next){
 			name: req.body.className,
 			college: req.body.collegeName,
 			owner: req.user.id,
-			professor: user.username,
+			professor: user.lastName,
 			createdAt: new Date()
 		})
 
@@ -260,6 +260,13 @@ router.get('/day/:id', function(req, res, next){
 			console.log(day);
 			console.log(classRoomUser);
 
+			classRoomUser.sort(function(a,b){
+					console.log('a', a)
+				if(a.user.lastName < b.user.lastName) return -1;
+    			if(a.user.lastName > b.user.lastName) return 1;
+   				return 0;
+			})
+
 			res.render('day', {
 				name: day.classRoom.name,
 				college: day.classRoom.college,
@@ -349,6 +356,14 @@ router.get('/students/:id', function(req, res, next){
 			res.redirect('/accessDenied')
 		} else {
 			ClassRoomUser.find({'classRoom': req.params.id}).populate('user').lean().exec(function(err, classRoomUser){
+				console.log(classRoomUser);
+				
+				classRoomUser.sort(function(a,b){
+					console.log('a', a)
+					if(a.user.lastName < b.user.lastName) return -1;
+    				if(a.user.lastName > b.user.lastName) return 1;
+   					return 0;
+				})
 
 				res.render('student', {
 					classRoom: classRoom,
@@ -421,17 +436,15 @@ router.get('/delete/:id', function(req, res, next){
 
 router.get('/settings', function(req, res, next){
 	User.findById(req.user.id).lean().exec(function(error, user){
-		lastname = user.username.split(' ').slice(-1).join(' ');
 		console.log(user);
 		res.render('profileset', {
-			user: user,
-			lastname: lastname
+			user: user
 		})
 	})
 })
 
 router.post('/settings', function(req, res, next){
-	User.findByIdAndUpdate(req.user.id, {'username' : req.body.name, 'email': req.body.email}).exec(function(error, user){
+	User.findByIdAndUpdate(req.user.id, {'firstName' : req.body.firstName, 'lastName': req.body.lastName, 'email': req.body.email}).exec(function(error, user){
 
 		res.redirect('/settings')
 

@@ -18,7 +18,7 @@ router.get('/register', function(req, res) {
 
 // POST registration page
 var validateReq = function(userData) {
-  return (userData.username && userData.password && userData.email && userData.profession &&
+  return (userData.firstName && userData.lastName && userData.password && userData.email && userData.profession &&
     (userData.password === userData.passwordRepeat));
 };
 
@@ -51,7 +51,8 @@ router.post('/register', function(req, res, next) {
 
     //save a new user to dB
 		var u = new User({
-		      username: req.body.username,
+		      firstName: req.body.firstName,
+          lastName: req.body.lastName,
 		      email: req.body.email.toLowerCase(),
 		      password: req.body.password,
           professor: professor,
@@ -71,7 +72,7 @@ router.post('/register', function(req, res, next) {
            var from_email = new helper.Email('verification@classroommarket.org');
             var to_email = new helper.Email(user.email);
             var subject = 'Verification Code for ClassroomMarket';
-            var content = new helper.Content('text/plain', 'Hi ' + user.username+ '! Use this Code to verify: ' + user.verifyCode);
+            var content = new helper.Content('text/plain', 'Hi ' + user.firstName+ '! Use this Code to verify: ' + user.verifyCode);
             var mail = new helper.Mail(from_email, subject, to_email, content);
 
             var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
