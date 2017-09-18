@@ -81,7 +81,7 @@ router.post('/transaction', function(req, res, next){
 		console.log('classRoomUser', classRoomUser);
 		console.log('gronks', classRoomUser.gronks);
 		console.log('amount', req.body.amount)
-		if(classRoomUser && classRoomUser.gronks >= parseInt(req.body.amount)) {
+		if(classRoomUser && classRoomUser.gronks >= parseInt(req.body.amount) && parseInt(req.body.amount) >= 0) {
 
 			Transaction.findOne({user: req.user.id, assignment: mongoose.Types.ObjectId(req.body.assignId)}).lean().exec(function(er, transaction){
 
@@ -116,7 +116,7 @@ router.post('/transaction', function(req, res, next){
 			})
 
 		} else {
-			res.json({'success': false, 'message': 'Insufficient Funds'})
+			res.json({'success': false, 'message': 'Invalid Number or Insufficient Funds'})
 
 		}
 
@@ -191,7 +191,7 @@ router.post('/calculatePrice', function(req, res, next){
 									assignment.weightedPrice = weighted;
 									assignment.active = false;
 
-									ClassRoomAssignment.find({'classRoom': mongoose.Types.ObjectId(req.body.classId)}).populate('assignment').sort('assignment.expireAt').lean().exec(function(error, classRoomAssignments){
+								ClassRoomAssignment.find({'classRoom': mongoose.Types.ObjectId(req.body.classId)}).populate('assignment').sort('assignment.expireAt').lean().exec(function(error, classRoomAssignments){
 
 											console.log('in here');
 											console.log('classroomassigns', classRoomAssignments);

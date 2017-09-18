@@ -32,8 +32,10 @@ Assignment.find({'expireAt': {$lt: currentDate}, 'active': true}).exec(function(
 	if(item.lastAssign) {
 		console.log('assignment is last');
 		ClassRoomAssignment.findOne({'assignment': item._id}).exec(function(error, classRoomAssignment){
+			console.log(item)
+			console.log(classRoomAssignment)
 			ClassRoomUser.find({'classRoom': classRoomAssignment.classRoom}).exec(function(error, classRoomUser){
-
+				console.log(item);
 				if (classRoomUser.length > 0) {
 
 					var asyncCall = new Promise(function(resolve, reject){
@@ -83,7 +85,7 @@ Assignment.find({'expireAt': {$lt: currentDate}, 'active': true}).exec(function(
 									assignment.weightedPrice = weighted;
 									assignment.active = false;
 
-									ClassRoomAssignment.find({'classRoom': classRoomAssignment.classRoom}).populate('assignment').sort('assignment.expireAt').lean().exec(function(error, classRoomAssignments){
+								ClassRoomAssignment.find({'classRoom': classRoomAssignment.classRoom}).populate('assignment').sort('assignment.expireAt').lean().exec(function(error, classRoomAssignments){
 
 										for(var i = 0; i < classRoomAssignments.length; i++){
 											if(classRoomAssignments[i].assignment._id + "" === item._id) {

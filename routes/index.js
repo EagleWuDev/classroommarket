@@ -310,8 +310,17 @@ router.get('/assignment/:id', function(req, res, next){
 
 						console.log(assignment);
 						console.log("transactions", transactions);
+					
 
 						if(transactions.length > 0 && transactions[0].classRoom.owner + "" === req.user.id){
+							transactions.sort(function(a,b){
+								console.log('a', a)
+								if(a.user.lastName < b.user.lastName) return -1;
+    							if(a.user.lastName > b.user.lastName) return 1;
+   								return 0;
+							})
+
+
 							res.render('assign', {
 								name: assignment.name,
 								weight: assignment.weight,
