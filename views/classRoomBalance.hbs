@@ -17,7 +17,7 @@
                     <a href="/classRoom/{{classRoom._id}}"><h3>Assignments</h3></a>
                 </li>
                 <li>
-                   <a href="/classRoomBalance/{{classRoom._Id}}"><h3>Balances</h3></a>
+                    <h3>Balances</h3>
                 </li>
                  <li>
                    <a href="/charts/{{classRoom._id}}"><h3>Graphs</h3></a>
@@ -42,37 +42,28 @@
     </div>
 {{/if}}
 
+
 <div class="main">
  <a href="#menu-toggle" class="menu" id="menu-toggle"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span></a>
 	<div class="container">
 		<div class="col-md-12">
-    <h1 class="secondTitle">{{name}} Results</h1>
-
-    <h2 style="margin-top: 1vh !important;">Statistics</h2>
-      <div class="col-md-4 statBox"><center><h4 style="font-weight: 600">WEIGHT</h4> <h5>{{weight}}</h5></center></div>
-      <div class="col-md-4 statBox"><center><h4 style="font-weight: 600">AVGWAGE</h4><h5><span class="round">{{averageWage}}</span> G</h5></center></div>
-      <div class="col-md-4 statBox"><center><h4 style="font-weight: 600">SUPPLY</h4><h5>{{supply}}</h5></center></div>
-      <div class="col-md-4 statBox"><center><h4 style="font-weight: 600">INFLATION</h4><h5> <span class="round">{{inflation}}</span></h5></center></div>
-      <div class="col-md-4 statBox"><center><h4 style="font-weight: 600">PRICE</h4><h5><span class="round">{{price}}</span></h5></center></div>
-      <div class="col-md-4 statBox"><center><h4 style="font-weight: 600">WEIGHTED PRICE</h4><h5><span class="round">{{weightedPrice}}</span></h5></div>
-
-      <div class="clear"></div>
-      <h2 style="margin-top: 3vh !important;">Individual Student Transactions</h2>
-      <table class="table table-striped">
+    <h1 class="secondTitle">Current Balance Holdings</h1>
+    
+       <table class="table table-striped">
       <thead>
         <tr>
           <th>Name</th>
-          <th>Extra Credit Received</th>
-          <th>Gronks Spent</th>
+        
+          <th>Balance (Gronks)</th>
         </tr>
       </thead>
       <tbody>
 
-      {{#each transactions}}
+      {{#each classRoomUsers}}
       <tr>
         <td>{{user.lastName}}, {{user.firstName}}</td>
-        <td><span class="round">{{extraCreditReceived}}</span></td>
-        <td>{{spent}}</td>
+        <td><span class="round">{{gronks}}</span></td>
+     
 
       </tr>
       {{/each}}
@@ -80,9 +71,8 @@
       </tbody>
 
       </table>
-		</div>
-	</div>
-</div>
-</div>
-
-
+      </div>
+      </div>
+      </div>
+      </div>
+      </div>

@@ -285,6 +285,28 @@ router.get('/day/:id', function(req, res, next){
 	})
 })
 
+router.get('/classRoomBalance/:id', function(req, res, next) {
+	ClassRoom.findById(req.params.id).lean().exec(function(error, classRoom){
+		if(classRoom.owner + "" !== req.user.id + "") {
+			res.redirect('/home');
+		} else {
+			ClassRoomUser.find({'classRoom': req.params.id}).populate('user').lean().exec(function(error, classRoomUsers){
+			
+					classRoomUsers.sort(function(a,b){
+							
+							if(a.user.lastName < b.user.lastName) return -1;
+    						if(a.user.lastName > b.user.lastName) return 1;
+   							return 0;
+						})
+				res.render('classRoomBalance', {
+					classRoomUsers:classRoomUsers,
+					classRoom: classRoom
+				});
+			})
+		}
+	})
+})
+
 router.get('/assignment/:id', function(req, res, next){
 
 	ClassRoomAssignment.findOne({'assignment': req.params.id}).populate('classRoom').lean().exec(function(error, classRoomAssignment){
