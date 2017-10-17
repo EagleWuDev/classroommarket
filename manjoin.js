@@ -1,5 +1,5 @@
 var ClassRoomUser = require('./models/models').ClassRoomUser;
-
+var Transaction = require('./models/models').Transaction;
 // ----------------------------------------------
 // Import dependencies
 // ----------------------------------------------
@@ -16,10 +16,23 @@ db.once('open', function callback () {
   console.log("DB Connected!");
 });
 
-ClassRoomUser.find({'classRoom': '5914a085dbbbe40011399071'}).exec(function(error, classRoomUser){
-	console.log(classRoomUser.length);
-	ClassRoomUser.find({'classRoom': '59bf148e79e72700114fdf89'}).exec(function(error, classRoomUser1){
-		console.log(classRoomUser1.length);
-	})
+// var t = new Transaction({
+// 	'user': '59b0b540e5a29500115d95ff',
+// 	'assignment' : '59bf158179e72700114fdf98',
+// 	'classRoom' : '59bf148e79e72700114fdf89',
+// 	'spent' : 5
+// });
+
+// t.save(function(error, trans){
+	Transaction.find({'assignment': '59bf158179e72700114fdf98'}).populate('assignment').exec(function(error, transCheck){
+
+		transCheck.forEach(function(item){
+			Transaction.findById(item._id).populate('assignment').exec(function(error, trans){
+				console.log(trans);
+			})
+		})
+// })
+
+
 })
 

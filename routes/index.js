@@ -307,6 +307,10 @@ router.get('/classRoomBalance/:id', function(req, res, next) {
 	})
 })
 
+router.get('classRoomTransactions/:id', function(req, res, next) {
+	
+})
+
 router.get('/assignment/:id', function(req, res, next){
 
 	ClassRoomAssignment.findOne({'assignment': req.params.id}).populate('classRoom').lean().exec(function(error, classRoomAssignment){
