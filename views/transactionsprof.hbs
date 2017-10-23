@@ -1,0 +1,157 @@
+<link rel="stylesheet" type="text/css" href="/stylesheets/home.css"/>
+<link rel="stylesheet" type="text/css" href="/stylesheets/class.css">
+
+<div id="wrapper" class="toggled">
+   <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <h5 class="sidebar-title">
+                      {{classRoom.name}}
+                  </h5>
+                </li>
+                <li>
+                    <a href="/home"><h3>Home</h3></a>
+                </li>
+                 <li>
+                    <a href="/classRoom/{{classRoomId}}"><h3>Assignments</h3></a>
+                </li>
+                <li>
+                   <a href="/classRoomBalance/{{classRoomId}}"><h3>Balances</h3></a>
+                </li>
+                <li>
+                  <h3>Transactions</h3>
+                </li>
+                 <li>
+                   <a href="/charts/{{classRoomId}}"><h3>Graphs</h3></a>
+                </li>
+                <li>
+                   <a href="/market_settings/{{classRoomId}}"><h3>Market Settings</h3></a>
+                </li>
+                <li>
+                   <a href="/logout"><h3>Logout</h3></a>
+                </li>
+            </ul>
+        </div>
+
+
+ <div id="page-content-wrapper">
+
+{{#if error}}
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+      {{error}}
+    </div>
+{{/if}}
+
+<div class="main">
+ <a href="#menu-toggle" class="menu" id="menu-toggle"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span></a>
+	<div class="container">
+		<div class="col-md-12">
+    <h1 class="secondTitle">{{name}} Transactions</h1>
+    </div>
+     <a class="assignmentAdd" data-toggle="collapse" href="#assign" aria-expanded="false" aria-controls="collapseExample" style="margin-bottom: 1vh">
+    Assignment View
+      </a>
+   
+    </p>
+    <div class="collapse" id="assign">
+      <div class="card card-body">
+
+
+    {{#each transactions}}
+      <p>
+     <a class="btn" style="background: none; border: 1px solid black; padding: 10px;" data-toggle="collapse" href="#{{id}}" aria-expanded="false" aria-controls="collapseExample">
+    {{name}}
+      </a>
+   
+    </p>
+    <div class="collapse" id="{{id}}">
+      <div class="card card-body">
+        <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Gronks Spent</th>
+        </tr>
+      </thead>
+      <tbody>
+      {{#each contents}}
+      
+
+      <tr>
+        <td>{{user.lastName}}, {{user.firstName}}</td>
+      
+        <td>{{spent}}</td>
+
+      </tr>
+    
+
+  {{/each}}
+
+      </tbody>
+
+      </table>
+      </div>
+</div>
+    {{/each}}
+
+  </div>
+  </div>
+
+
+    <a class="gronksAdd" data-toggle="collapse" href="#student" aria-expanded="false" aria-controls="collapseExample">
+    Student View
+      </a>
+   
+    </p>
+    <div class="collapse" id="student">
+      <div class="card card-body">
+
+
+    {{#each students}}
+      <p>
+     <a class="btn" style="background: none; border: 1px solid black; padding: 10px;" data-toggle="collapse" href="#{{id}}" aria-expanded="false" aria-controls="collapseExample">
+    {{lastName}}, {{firstName}}
+      </a>
+    
+   
+    </p>
+    <div class="collapse" id="{{id}}">
+      <div class="card card-body">
+        <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Assignment</th>
+          <th>Gronks Spent</th>
+        </tr>
+      </thead>
+      <tbody>
+      {{#each contents}}
+      
+
+      <tr>
+        <td>{{assignment.name}}</td>
+      
+        <td>{{spent}}</td>
+
+      </tr>
+    
+
+  {{/each}}
+
+      </tbody>
+
+      </table>
+      </div>
+</div>
+    {{/each}}
+
+  </div>
+  </div>
+
+
+</div>
+</div>
+</div>

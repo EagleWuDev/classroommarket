@@ -16,18 +16,15 @@
                  <li>
                     <a href="/classRoom/{{classRoom._id}}"><h3>Assignments</h3></a>
                 </li>
+              
                 <li>
-                    <h3>Balances</h3>
-                </li>
-                <li>
-                   <a href="/transactions/{{classRoom._id}}"><h3>Transactions</h3></a>
+                  <h3>Transactions</h3>
                 </li>
                  <li>
                    <a href="/charts/{{classRoom._id}}"><h3>Graphs</h3></a>
                 </li>
-                <li>
-                   <a href="/market_settings/{{classRoom._id}}"><h3>Market Settings</h3></a>
-                </li>
+                
+              
                 <li>
                    <a href="/logout"><h3>Logout</h3></a>
                 </li>
@@ -45,37 +42,43 @@
     </div>
 {{/if}}
 
-
 <div class="main">
  <a href="#menu-toggle" class="menu" id="menu-toggle"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span></a>
-	<div class="container">
-		<div class="col-md-12">
-    <h1 class="secondTitle">Current Balance Holdings</h1>
-    
-       <table class="table table-striped">
+    <div class="container">
+    <div class="col-md-12">
+    <h1 class="secondTitle">Your Transactions</h1>
+
+
+    <table class="table table-striped">
       <thead>
         <tr>
-          <th>Name</th>
-        
-          <th>Balance (Gronks)</th>
+  
+          <th>Assignment</th>
+          <th>Amount</th>
         </tr>
       </thead>
       <tbody>
+      {{#each transactions}}
+      
 
-      {{#each classRoomUsers}}
       <tr>
-        <td>{{user.lastName}}, {{user.firstName}}</td>
-        <td><span class="round">{{gronks}}</span></td>
      
+      
+        <td>{{assignment.name}}</td>
+        <td>{{spent}}</td>
 
       </tr>
-      {{/each}}
+    
+
+  {{/each}}
 
       </tbody>
 
       </table>
-      </div>
-      </div>
-      </div>
-      </div>
-      </div>
+
+</div>
+</div>
+</div>
+
+ </div>
+ </div>

@@ -9,6 +9,7 @@ var Day = require('../models/models').Day;
 var Transaction = require('../models/models').Transaction;
 var Helpers = require('handlebars-helpers');
 var helper = require('sendgrid').mail;
+var groupBy = require('group-by');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -81,7 +82,66 @@ router.post('/home', function(req, res, next){
 
 	})
 })
+router.get('/transactions/:id', function(req, res, next){
+	ClassRoom.findById(req.params.id).exec(function(error, classRoom){
 
+	if(classRoom.owner + "" === req.user.id + "") {
+
+	
+	Transaction.find({'classRoom' : req.params.id}).populate('user assignment').lean().exec(function(error, trans){
+		var grouped = groupBy(trans, function(tran){
+			return tran.assignment._id
+		});
+		var groupedName = groupBy(trans, function(tran){
+			return tran.user._id
+		})
+		
+		var arr = [];
+		var arrName = [];
+		for (key in grouped){
+			arr.push({'name':grouped[key][0].assignment.name,'id':grouped[key][0]._id,'contents': grouped[key]});
+		}
+		for (key in groupedName) {
+			arrName.push({'lastName': groupedName[key][0].user.lastName,'firstName': groupedName[key][0].user.firstName, 'id':groupedName[key][0]._id, 'contents':groupedName[key]});
+		}
+		
+		arrName.forEach(function(item){
+			
+			item.contents.sort(function(a,b){
+				return a.assignment.expireAt - b.assignment.expireAt
+			})
+		})
+
+		arrName.sort(function(a,b){
+			 if(a.lastName < b.lastName) return -1;
+   			 if(a.lastName > b.lastName) return 1;
+   				 return 0;
+		})
+
+		console.log("arrName After", arrName)
+		arr.sort(function(a,b){
+			return a.contents[0].assignment.expireAt - b.contents[0].assignment.expireAt
+		});
+		
+
+		res.render('transactionsprof', {
+			transactions: arr,
+			students: arrName,
+			classRoomId: req.params.id,
+			classRoom: classRoom
+		});
+
+	})
+} else {
+	Transaction.find({'classRoom': req.params.id, 'user': req.user.id}).populate('assignment').lean().exec(function(error, transactions){
+		res.render('transactionsstu', {
+			transactions: transactions,
+			classRoom: classRoom
+		})
+	})
+}
+})
+})
 router.get('/classRoom/:id', function(req, res, next){
 	ClassRoom.findById(req.params.id).exec(function(error, classRoom){
 
