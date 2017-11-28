@@ -38,8 +38,8 @@ router.post('/addGronks', function(req, res, next){
 					var asyncCall = new Promise(function(resolve, reject) {
 						var count = 0;
 						data.forEach(function(item, index){
-							var eC = parseInt(item[1]);
-							var num = parseInt(item[1]) * day.wage;
+							var eC = parseFloat(item[1]);
+							var num = parseFloat(item[1]) * day.wage;
 							count+=eC;
 							ClassRoomUser.findOneAndUpdate({user: mongoose.Types.ObjectId(item[0]), classRoom: classId}, {$inc:{gronks:num}}, {new: true}).exec(function(error, response){
 									console.log(count)
@@ -81,7 +81,7 @@ router.post('/transaction', function(req, res, next){
 		console.log('classRoomUser', classRoomUser);
 		console.log('gronks', classRoomUser.gronks);
 		console.log('amount', req.body.amount)
-		if(classRoomUser && classRoomUser.gronks >= parseInt(req.body.amount) && parseInt(req.body.amount) >= 0) {
+		if(classRoomUser && classRoomUser.gronks >= parseFloat(req.body.amount) && parseFloat(req.body.amount) >= 0) {
 
 			Transaction.findOne({user: req.user.id, assignment: mongoose.Types.ObjectId(req.body.assignId)}).lean().exec(function(er, transaction){
 
@@ -91,22 +91,22 @@ router.post('/transaction', function(req, res, next){
 							user: req.user.id,
 							assignment: req.body.assignId,
 							classRoom: req.body.classId, 
-							spent: parseInt(req.body.amount)
+							spent: parseFloat(req.body.amount)
 						})
 
 						trans.save(function(error, trans){
-							ClassRoomUser.findByIdAndUpdate(classRoomUser._id, {$inc: {gronks: -parseInt(req.body.amount)}}, {new: true}).exec(function(err, cRU) {
+							ClassRoomUser.findByIdAndUpdate(classRoomUser._id, {$inc: {gronks: -parseFloat(req.body.amount)}}, {new: true}).exec(function(err, cRU) {
 
 								console.log('update', cRU)
 								res.json({'success': true, 'message' : 'transaction created', 'newBalance': cRU.gronks})
 							})
 						})
 					} else {
-						Transaction.findByIdAndUpdate(transaction._id, {$inc: {spent: parseInt(req.body.amount)}, updated: true}, {new: true}).exec(function(error, trans){
+						Transaction.findByIdAndUpdate(transaction._id, {$inc: {spent: parseFloat(req.body.amount)}, updated: true}, {new: true}).exec(function(error, trans){
 
 							console.log('transaction updated', trans);
 
-							ClassRoomUser.findByIdAndUpdate(classRoomUser._id, {$inc: {gronks: -parseInt(req.body.amount)}}, {new: true}).exec(function(err, cRU) {
+							ClassRoomUser.findByIdAndUpdate(classRoomUser._id, {$inc: {gronks: -parseFloat(req.body.amount)}}, {new: true}).exec(function(err, cRU) {
 
 								console.log('update', cRU)
 								res.json({'success': true, 'message' : 'transaction updated', 'newBalance': cRU.gronks})
