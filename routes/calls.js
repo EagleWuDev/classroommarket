@@ -586,7 +586,7 @@ router.post('/addExtraGronks', function(req, res, next){
 			var asyncCall = new Promise(function(resolve, reject) {
 						var count = 0;
 						data.forEach(function(item, index){
-							var eC = parseInt(item[1]);
+							var eC = parseFloat(item[1]);
 							count+=eC;
 							ClassRoomUser.findOneAndUpdate({user: mongoose.Types.ObjectId(item[0]), classRoom: classId}, {$inc:{gronks:eC}}, {new: true}).exec(function(error, response){
 								if(index === data.length-1) {
