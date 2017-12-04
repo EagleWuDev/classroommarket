@@ -6,6 +6,8 @@ var ClassRoom = require('../models/models').ClassRoom;
 var Assignment = require('../models/models').Assignment;
 var ClassRoomAssignment = require('../models/models').ClassRoomAssignment;
 var Day = require('../models/models').Day;
+var SurveyResult = require('../models/models').SurveyResult;
+var SurveyUserClassRoom = require('../models/models').SurveyUserClassRoom;
 var Transaction = require('../models/models').Transaction;
 var Helpers = require('handlebars-helpers');
 var helper = require('sendgrid').mail;
@@ -245,9 +247,14 @@ router.get('/classRoom/:id', function(req, res, next){
 
 			if(classroomUser.length > 0){
 				
+				var survey = false;
 				var count = 0;
 				var extraCreditRec = 0;
 				var weightCreditRec = 0;
+
+				if(classroomUser[0].surveyActivate) {
+					survey = true;
+				}
 
 				ClassRoomUser.find({'classRoom': req.params.id}).lean().exec(function(error, classRoomUsers){
 
@@ -275,7 +282,8 @@ router.get('/classRoom/:id', function(req, res, next){
 								classRoomUser: classroomUser[0],
 								eCRec: extraCreditRec,
 								weighted: weightCreditRec, 
-								classId: classRoom._id
+								classId: classRoom._id,
+								survey: survey
 							})
 						})
 					})
@@ -309,6 +317,46 @@ router.get('/join/:id', function(req, res, next) {
 
 	cRU.save(function(errpr, classRoomUser){
 		res.redirect('/classroom/' + req.params.id);
+	})
+})
+
+router.get('/survey/:id', function(req, res, next) {
+	res.render('survey')
+})
+
+router.post('/survey/:id', function(req, res, next) {
+
+	console.log('req.body', req.body);
+	var s = new SurveyResult({
+		one: parseInt(req.body.enjoyRadio),
+		two: parseInt(req.body.youRadio),
+		three: parseInt(req.body.recommendRadio),
+		four: parseInt(req.body.teachRadio),
+		five: parseInt(req.body.easyRadio),
+		six: parseInt(req.body.oftenRadio),
+		seven: parseInt(req.body.addRadio),
+		sOne: req.body.improve,
+		sTwo: req.body.systemImprove,
+		sThree: req.body.like,
+		SFour: req.body.thoughts
+	});
+
+	s.save(function(error, survey){
+
+		ClassRoomUser.findOneAndUpdate({'user': req.user.id, 'classRoom': req.params.id}, {'surveyActivate': false}).exec(function(error, classRoomUser){
+
+			var sUC = new SurveyUserClassRoom({
+				userId: req.user.id,
+				surveyId: survey._id,
+				classRoomId: req.params.id
+			})
+
+			sUC.save(function(error, surveyUserClassRoom){
+				res.redirect('/classRoom/' + req.params.id)
+			})
+
+
+		})
 	})
 })
 

@@ -52,6 +52,11 @@
 <a href="#menu-toggle" class="menu" id="menu-toggle"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span></a>
 	<div class="container">
 		<div class="col-md-12">
+    {{#if survey}}
+    <center>
+    <a href="/survey/{{classId}}" style="font-size: 2em">End of Class Survey</a>
+    </center>
+    {{/if}}
     <h1 class="secondTitle">Overview</h1>
 
     <div class="col-md-12 descBox">
@@ -74,6 +79,9 @@
     </div>
 
     <div class="clear"></div>
+
+
+
     <h1 class="secondTitle">Assignments</h1>
 
     {{#if assignments}}

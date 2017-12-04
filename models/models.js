@@ -46,6 +46,10 @@ var classRoomUserSchema = mongoose.Schema({
 	gronks: {
 		type: Number,
 		default: 0
+	},
+	surveyActivate: {
+		type: Boolean,
+		default: false
 	}
 })
 
@@ -150,6 +154,38 @@ var assignmentSchema = mongoose.Schema({
 		type: Boolean
 	}
 })
+
+
+var surveyResultsSchema = mongoose.Schema({
+	one: Number,
+	two: Number,
+	three: Number,
+	four: Number,
+	five: Number,
+	six: Number,
+	seven: Number,
+	sOne: String,
+	sTwo: String,
+	sThree: String,
+	sFour: String
+});
+
+var surveyUserClassRoomSchema = mongoose.Schema({
+	userId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'User'
+	},
+	surveyId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref:'SurveyResult'
+	},
+	classRoomId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'ClassRoom'
+	}
+});
+
+
 module.exports = {
 	User: mongoose.model('User', userSchema),
 	ClassRoom: mongoose.model('ClassRoom', classRoomSchema),
@@ -157,5 +193,7 @@ module.exports = {
 	Assignment: mongoose.model('Assignment', assignmentSchema),
 	ClassRoomUser: mongoose.model('ClassRoomUser', classRoomUserSchema),
 	ClassRoomAssignment: mongoose.model('ClassRoomAssignment', classRoomAssignmentSchema),
-	Transaction: mongoose.model('Transaction', transactionSchema)
+	Transaction: mongoose.model('Transaction', transactionSchema),
+	SurveyResult: mongoose.model('SurveyResult', surveyResultsSchema),
+	SurveyUserClassRoom: mongoose.model('SurveyUserClassRoom', surveyUserClassRoomSchema)
 }
