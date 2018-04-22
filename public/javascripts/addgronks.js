@@ -6,9 +6,19 @@ $('document').ready(function() {
 		$('input[name="gronks[]"]').each(function(item, index){
 			var iden = this.id;
 			var ret = [];
-			ret[0] = iden;
-			ret[1] = this.value;
-			data.push(ret);
+
+			console.log("value", this.value);
+
+			if (this.value) {
+				ret[0] = iden;
+				ret[1] = this.value;
+				data.push(ret);
+				console.log('Null');
+			} else {
+				ret[0] = iden;
+				ret[1] = 0;
+				data.push(ret);
+			}
 		});
 
 		var assignId = $('#assignment').attr('assign');

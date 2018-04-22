@@ -24,15 +24,24 @@ db.once('open', function callback () {
 // });
 
 // t.save(function(error, trans){
-	Transaction.find({'assignment': '59bf158179e72700114fdf98'}).populate('assignment').exec(function(error, transCheck){
+	// Transaction.find({'assignment': '59bf158179e72700114fdf98'}).populate('assignment').exec(function(error, transCheck){
 
-		transCheck.forEach(function(item){
-			Transaction.findById(item._id).populate('assignment').exec(function(error, trans){
-				console.log(trans);
-			})
-		})
+	// 	transCheck.forEach(function(item){
+	// 		Transaction.findById(item._id).populate('assignment').exec(function(error, trans){
+	// 			console.log(trans);
+	// 		})
+	// 	})
 // })
 
 
+// })
+
+
+ClassRoomUser.find({'classRoom' : '59bf148e79e72700114fdf89'}).exec(function(error, classRoomUsers) {
+	classRoomUsers.forEach(function(item, index){
+		ClassRoomUser.findByIdAndUpdate(item._id, {'surveyActivate': true}, {new: true}).exec(function(error, classRoomUser){
+			console.log(classRoomUser);
+		})
+	})
 })
 

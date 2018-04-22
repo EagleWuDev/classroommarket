@@ -11,6 +11,8 @@ $('document').ready(function() {
 			data.push(ret);
 		});
 
+		console.log("data", data);
+
 		var classId = $(this).attr('classId');
 
 		console.log('classId', classId);
