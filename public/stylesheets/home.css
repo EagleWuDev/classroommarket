@@ -17,6 +17,9 @@ h1{
 .insufficientId{
 	display: none;
 }
+.successId{
+	display: none;
+}
 .hell{
 	font-family: "Helvetica" !important
 }
