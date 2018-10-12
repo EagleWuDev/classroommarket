@@ -7,6 +7,7 @@ $(document).ready(function(){
 	})
 
 	$('#contactSubmit').click(function(e){
+		e.preventDefault();
 		console.log('clicked');
 		var name = $('#nameContact').val();
 		var email = $('#emailContact').val();
