@@ -7,17 +7,21 @@ $(document).ready(function(){
 	})
 
 	$('#contactSubmit').click(function(e){
-		e.preventDefault();
+
 		console.log('clicked');
 		var name = $('#nameContact').val();
 		var email = $('#emailContact').val();
 
+		console.log(name);
+		console.log(email);
+
 		$.ajax({
 			  type: "POST",
 			  data: {'name' : name, 'email': email},
-			  url: "/signUp",
+			  url: "/joinUp",
 			  success: function(response){
-				console.log(response);
+				console.log('getting response');
+				console.log(response)
 				if(response['success']){
 					$('#contactForm').fadeOut();
 

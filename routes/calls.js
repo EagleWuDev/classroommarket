@@ -783,7 +783,12 @@ router.post('/editAssign/:id', function(req, res, next){
 	})
 })
 
-router.post('/signUp', function(req, res){
+router.post('/work', function(req, res){
+	console.log('work');
+	res.json({'success': true})
+})
+
+router.post('/joinUp', function(req, res, next){
 	console.log('hit signUp');
 	console.log('body',req.body);
 	  var from_email = new helper.Email('signup@classroommarket.org');
@@ -810,7 +815,6 @@ router.post('/signUp', function(req, res){
 
 		     })
 
-		 // res.json({'success': true})
 })
 
 module.exports = router;
