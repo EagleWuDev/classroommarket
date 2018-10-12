@@ -7,6 +7,7 @@ var ClassRoomAssignment = require('../models/models').ClassRoomAssignment;
 var Day = require('../models/models').Day;
 var Assignment = require('../models/models').Assignment;
 var Transaction = require('../models/models').Transaction;
+var helper = require('sendgrid').mail;
 
 router.get('/search', function(req, res, next){
 	
@@ -780,6 +781,36 @@ router.post('/editAssign/:id', function(req, res, next){
 		}
 
 	})
+})
+
+router.post('/signUp', function(req, res){
+	console.log('hit signUp');
+	console.log('body',req.body);
+	  var from_email = new helper.Email('signup@classroommarket.org');
+            var to_email = new helper.Email('eaglewu014@gmail.com');
+            var subject = 'New Sign Up';
+            var content = new helper.Content('text/plain', 'Name: ' + req.body.name+ ' - email: ' + req.body.email);
+            var mail = new helper.Mail(from_email, subject, to_email, content);
+
+            var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
+            var request = sg.emptyRequest({
+              method: 'POST',
+              path: '/v3/mail/send',
+              body: mail.toJSON(),
+            });
+
+            sg.API(request, function(error, response) {
+              console.log(response.statusCode);
+              console.log(response.body);
+              console.log(response.headers);
+
+              console.log(error);
+
+              res.json({'success': true})
+
+		     })
+
+		 // res.json({'success': true})
 })
 
 module.exports = router;

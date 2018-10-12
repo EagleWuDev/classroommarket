@@ -1,4 +1,3 @@
-<link rel="stylesheet" type="text/css" href="../stylesheets/home.css">
 {{#if error}}
     <div class="alert alert-danger" role="alert">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -6,62 +5,241 @@
       {{error}}
     </div>
 {{/if}}
-<div class="container">
-<nav class="navbar navbar-default" style="background: none !important; border: none !important; -webkit-box-shadow: none !important">
-  <div class="container-fluid">
-    <div class="navbar-header" style="background: none !important; border: none !important">
-      <a class="navbar-brand" href="#">
-        <img src="./images/pie-chart.png" width="40vh">
-      </a>
-      </div>
-      <form method="POST" class="navbar-form navbar-right" style="float: right !important; padding-top: 0.5vh;">
-    <div class="form-group">
-        <input type="text" name="username" class="form-control" placeholder="Email">
-    </div>
-    <div class="form-group">
-    
-        <input type="password" name="password" class="form-control" placeholder="Password">
-    </div>
-    <div class="form-group">
-        <button style="background: #6CE317!important; padding: 6px; border: none !important; color: #FFF; font-size: 1em; border-radius: 3px">Login</button>
-    </div>
-    <div class="clear"></div>
-        <a href="/password_reset" style="float: right">Forgot your password?</a>
-    
-</form>
-    
-  </div>
-</nav>
-</div>
 
+<head>
+    <title>ClassroomMarkets</title>
 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
+    <!--Raleway Font-->
+    <link href='https://fonts.googleapis.com/css?family=Raleway:600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Raleway:100' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
 
-<div class="container">
-    
-    <div class="col-md-6">
-        <h1 style="color: #6CE317; font-size: 3.5em; margin-bottom: 0" class="hell">ClassRoom Markets</h1>
-        <h1 style="color: #000000; font-size: 3em; margin-top: 1.5vh" class="hell">Create Teachable Moments in a Unique Market Simulation</h1>
-        <a href="/register" style="margin-top: 2vh;"><button style="background: #6CE317!important; padding: 10px; border: none !important; color: #FFF; font-size: 1.5em; border-radius: 3px" >Get Started</button></a>
-        
+    <link rel="stylesheet" href="../stylesheets/index2.css" />
+
+</head>
+  <!--Welcome Page-->
+    <body>
+      <div class="page-header" id="grad">
+      <a class="header-image" </a> <img src="../images/pie-graph.png" class="chart" id="pie-chart">
+      <form method="POST" class="form-inline" id="form">
+        <div class="form-group">
+          <div class="header-text" id="header-text">
+              <h6> Already have an Account? </h6>
+          </div>
+            <label class="sr-only" for="inputUsername">Username</label>
+            <input type="username" name="username" class="form-control" id="inputUsername" placeholder="Email">
         </div>
-    <div class="col-md-6 chart">
+        <div class="form-group">
+            <label class="sr-only" for="inputPassword">Password</label>
+            <input name="password" type="password" class="form-control" id="inputPassword" placeholder="Password">
+        </div>
+        <button type="submit" class="btn btn-primary" id= "submitButton">Log in</button>
+    </form>
     </div>
 
-</div>
-
-
- <footer>
-    <div class="container">
-      <div class="col-md-12">
-      
-        <center>
-         <img src="/images/babsonlogo.png" width="10%">
-        <h6>Classroom Markets is available under the MIT license; additional terms may apply.</h6>
-        <h6>Classroom Markets was developed by Eagle Wu, is based on a paper by <a href="http://www.babson.edu/Academics/faculty/profiles/Pages/Staveley-O'Carroll-James.aspx" target="_blank"> James Staveley-O'Carroll </a>, and is supported by Babson College</h6>
-       
-        </center>
+    <div class="container-fluid welcome">
+      <div class="row">
+        <div class="col-md-12">
+          <h2>W E L C O M E &ensp;T O</h2><br />
+          <h1>ClassroomMarkets</h1>
+          <br /><br /><br /><br /><br />
+          <h3>Sign up for the closed Beta</h3><br />
+          <button class="JoinNow" id="joinNow" >Join Now</button>
+      </div>
       </div>
     </div>
-    </footer>
+    <br />
 
+
+
+
+<!--Teaching Information-->
+    <div class="container teaching">
+      <h2>Teach Economics with a</h2>
+      <h1>Real Market Economy</h1><br /><br />
+        <p>
+          Classroom Markets allows students to <strong>experience</strong> the real interactions  in a market by allowing students to produce and buy extra credit for class assignments.
+          <br /><br />
+          Unlike most market simulation games which are completely hands off, Classroom Markets is built with a <strong>focus</strong> on letting professors walk students through important economic concepts.
+          <br /><br />
+          This allows professors the unique ability to create unique <strong>teachable</strong> moments like never before.
+        </p>
+    </div>
+    <!--How It Works-->
+    <div class="container-fluid explanation">
+        <center>
+        <h1>How It Works</h1>
+        </center>
+        <div class="container market">
+          <div class="row">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-2">
+              <img src="images/market.png" class="icon"/>
+            </div>
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-6">
+              <h2>Create a Market.</h2><br />
+                <p>
+                  Professors create a contained market for extra credit in their class. <br /><br />
+                  Each market has its own supply of extra credit, pool of student demand, and graphs of the market’s health such as inflation, price, demand, and supply.
+                </p>
+            </div>
+          </div>
+        </div>
+        <div class="container currency">
+          <div class="row">
+            <div class="col-md-6">
+              <h2>Produce Currency.</h2><br />
+                <p>
+                  Students earn virtual money from instructors as they participate in class; at the same time, the supply of extra credit is also increased.
+                </p>
+            </div>
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-2">
+              <img src="images/money.png" class="icon"/>
+            </div>
+            <div class="col-md-2">
+            </div>
+          </div>
+        </div>
+        <div class="container credit">
+          <div class="row">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-2">
+              <img src="images/buy.png" class="icon"/>
+            </div>
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-6">
+              <h2>Students Buy Extra Credit.</h2><br />
+                <p>
+                  When an assignment is due, all of the extra credit in the market is put up for sale, and students enter their demand for extra credit. <br /><br />
+                  The market price is generated to clear the market, and students are awarded extra credit.
+                </p>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <!--The Team-->
+    <div class="container-fluid teamhead">
+    <center>
+    <br />
+    <div id="Team">
+      <h1> The Team </h1>
+    </div>
+    <br />
+    </center>
+  </div>
+</div>
+  <div class="container">
+      <div><p class="blockText"> As a team of students, professors, and developers, everyone on the classroom markets team brings their own unique perspective.</p>
+      </div>
+  </div>
+  <div class="container-fluid ocaroll">
+    <div class="container ocaroll">
+      <div class="row">
+        <div class="col-md-12">
+          <img src="images/ocaroll.png" class="photo">
+          <h5> Josh Staveley O'Carroll </h5>
+          <p> Dr. Staveley-O’Carroll has been teaching college level economics for over ten years and developed the concept for Classroom Markets while working at Lander University. His research covers international capital flows and economic pedagogy. In his classrooms he strives to give students as many hands on experiences with economic phenomena as possible.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <br>
+    <div class="container-fluid eagle">
+      <div class="container eagle">
+        <div class="row">
+          <div class="col-md-12">
+             <img src="images/Eagle1.jpg" class="eaglePhoto">
+            <h5> Eagle Wu </h5>
+            <p> Eagle Wu was a student in Professor Staveley-O’Carroll’s class when he used the early version of classroom markets. Eagle developed the initial website version of the simulation where it debuted at the national CTREE conference in Denver, Colorado. Along with Classroom Markets, Eagle is also working on a virtual reality training company called <a target="_blank" href="https://www.vinci-vr.com" >VINCI.</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  <br>
+  <br>
+  <br>
+  <div class="container-fluid terri">
+    <div class="container terri">
+      <div class="row">
+        <div class="col-md-12">
+          <img src="images/terri.jpg" class="terriPhoto">
+          <h5> Terri Javaluyas </h5>
+          <p> Terri Javaluyas is an undergraduate student at Northeastern University. After doing UX/UI design work at a healthcare company, she became interested in learning more about front-end development and became involved in the redesign of Classroom Markets. As Terri prepares to graduate in May, she is actively pursuing more opportunities in the design field. </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <br>
+  <div class="container-fluid cindy">
+    <div class="container cindy">
+      <div class="row">
+        <div class="col-md-12">
+          <img src="images/cindy.jpg" class="cindyPhoto">
+          <h5> Cindy Zhao </h5>
+          <p> Cindy Zhao is an undergraduate student at Northeastern University. She is passionate about visual design and front-end development, and is always eager to learn more. Along with ClassRoomMarkets, Cindy is a senior designer for a number of magazines on campus, and enjoys photography; her work can be seen at <a target="_blank" href="https://www.zhaocindy.com">zhaocindy.com </a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+
+    <!--Contact Us-->
+    <div id="signUpForm" class="container-fluid">
+      <div class="row">
+        <div class="col-md-6 contact">
+          <h1>GET IN TOUCH</h1>
+          <h4>Sign up for the closed Beta</h4>
+          <img src="images/arrow.png" class="arrow"/>
+        </div>
+        <div class="col-md-6 forms" id="thankYou">
+          <center>
+          <h2 class="name" style="margin-top: 10vh">Thank You - We'll be in touch!</h2>
+        </center>
+        </div>
+        <div class="col-md-6 forms" id="contactForm">
+          <h5 class="name">Name</h5>
+          <form>
+            <div class="form-group" id="contactName">
+              <label class="sr-only" for="inputName">Name</label>
+              <input type="name" class="form-control" placeholder="" id="nameContact">
+            </div>
+          </form>
+          <h5 class="email">E-mail</h5>
+          <form>
+            <div class="form-group" id="contactEmail">
+              <label class="sr-only" for="inputEmail">Email</label>
+              <input type="email" class="form-control" placeholder="" id="emailContact">
+            </div>
+          </form>
+          <button type="submit" class="btn btn-primary" id="contactSubmit">SUBMIT</button>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+    <h1> CONTACT US </h1>
+    <h2>info@classroommarkets.com</h2>
+    <br />
+    <p>
+      Classroom Markets is available under the MIT license; additional terms may apply.
+      Classroom Markets is based on a paper by James Staveley-O’Carroll  and is supported by Babson College.
+    </p>
+    </div>
+
+    <script src="../javascripts/signup.js"></script>
+    <script src="../javascripts/zenscroll-min.js"></script>
+  </body>
