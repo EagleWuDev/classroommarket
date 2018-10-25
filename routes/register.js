@@ -56,7 +56,7 @@ router.post('/register', function(req, res, next) {
 		      email: req.body.email.toLowerCase(),
 		      password: req.body.password,
           professor: professor,
-          verified: false,
+          verified: true,
           verifyExpiration: date,
           verifyCode: randomCode()
 		    });
@@ -68,32 +68,36 @@ router.post('/register', function(req, res, next) {
 		      }
 		      console.log("Created new user:");
 		      console.log(user);
+          req.logIn(user, function(err) {
+            if (err) {console.log('error', error);}
+            res.redirect('/home')
+          })
 
-           var from_email = new helper.Email('verification@classroommarket.org');
-            var to_email = new helper.Email(user.email);
-            var subject = 'Verification Code for ClassroomMarket';
-            var content = new helper.Content('text/plain', 'Hi ' + user.firstName+ '! Use this Code to verify: ' + user.verifyCode);
-            var mail = new helper.Mail(from_email, subject, to_email, content);
+          //  var from_email = new helper.Email('verification@classroommarket.org');
+          //   var to_email = new helper.Email(user.email);
+          //   var subject = 'Verification Code for ClassroomMarket';
+          //   var content = new helper.Content('text/plain', 'Hi ' + user.firstName+ '! Use this Code to verify: ' + user.verifyCode);
+          //   var mail = new helper.Mail(from_email, subject, to_email, content);
 
-            var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
-            var request = sg.emptyRequest({
-              method: 'POST',
-              path: '/v3/mail/send',
-              body: mail.toJSON(),
-            });
+          //   var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
+          //   var request = sg.emptyRequest({
+          //     method: 'POST',
+          //     path: '/v3/mail/send',
+          //     body: mail.toJSON(),
+          //   });
 
-            sg.API(request, function(error, response) {
-              console.log(response.statusCode);
-              console.log(response.body);
-              console.log(response.headers);
-              req.logIn(user, function(err) {
-                if (err) { return next(err); }
-                  User.findByIdAndUpdate(req.user._id, {sessionId: req.session.id}, function(err) {
-                      console.log(req.session);
-                       res.redirect('/verify');
-                    });
-              });
-		        })
+          //   sg.API(request, function(error, response) {
+          //     console.log(response.statusCode);
+          //     console.log(response.body);
+          //     console.log(response.headers);
+          //     req.logIn(user, function(err) {
+          //       if (err) { return next(err); }
+          //         User.findByIdAndUpdate(req.user._id, {sessionId: req.session.id}, function(err) {
+          //             console.log(req.session);
+          //              res.redirect('/verify');
+          //           });
+          //     });
+		        // })
 	})
 });
 })
