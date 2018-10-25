@@ -90,10 +90,11 @@ passport.use(new LocalStrategy(function(username, password, done) {
 // Route Setting
 // ----------------------------------------------
 
+app.use('/', calls);
 app.use('/', auth(passport, mongoStore));
 app.use('/', register);
 app.use('/', index);
-app.use('/', calls);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

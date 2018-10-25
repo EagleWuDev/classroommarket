@@ -20,6 +20,8 @@ $(document).ready(function(e){
 			    	console.log(response);
 
 			    	if(response.success){
+			    		$(".successId").css("display","block");
+			    		setTimeout(3000);
 			    		window.location.replace("/classRoom/"+classId);
 			    	}
 			    	else {
@@ -33,6 +35,7 @@ $(document).ready(function(e){
 
 	$('.modal').on('hidden.bs.modal', function(e) {
 		$(".insufficientId").css("display","none");
+		$(".successId").css("display","none");
 	})
 
 
