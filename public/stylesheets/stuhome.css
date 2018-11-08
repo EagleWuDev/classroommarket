@@ -1,0 +1,419 @@
+.topScreen{
+  width: 100%;
+  background-image: linear-gradient(#7CFFD1,#69EBA7,#61E294);
+  background-size: cover;
+  height: 40vh;
+  padding-right: 0;
+  margin-right: 0
+}
+
+body {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #ffffff;
+    overflow-x: hidden;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+.profilePic{
+  border-radius:50%;
+  height: 17vh;
+  width: 17vh;
+  margin-left:10vh;
+}
+
+.profileName{
+  margin-left:5vh;
+  color:#494949;
+  font-family: "Roboto-regular";
+  letter-spacing:1px;
+  padding-top: 2vh;
+
+}
+
+.profileSubName{
+  margin-left:7vh;
+  color: #b7b7b7;
+  font-family: "Raleway";
+  font-size: 20px;
+  padding-bottom:3vh;
+}
+
+#homeIcon{
+  height: 5vh;
+  width: 5vh;
+  margin-right:2vh;
+  opacity: 0.7;
+  margin-right: 3vh;
+
+}
+
+#profileIcon{
+  height: 5vh;
+  width: 5vh;
+  margin-right:2vh;
+  opacity: 0.7;
+  margin-right: 3vh;
+
+}
+
+#trendIcon{
+  height:5vh;
+  width:5vh;
+  margin-right:2vh;
+  opacity: 0.7;
+  margin-right: 3vh;
+
+}
+
+.sidebarText{
+  font-family:"Roboto-light";
+  font-size: 20px;
+  letter-spacing:1px;
+}
+
+.sideHome{
+  margin-bottom:2vh;
+}
+
+.sideProfile{
+  margin-bottom:2vh;
+}
+
+.sideTrends{
+  margin-bottom:2vh;
+}
+
+.topText h4{
+  color:white;
+  padding-left: 5vh;
+  font-family:"Roboto-light";
+}
+
+.topText2{
+  color:white;
+  font-family:"Roboto-light";
+  padding-left:2vh;
+}
+
+.gronksBox{
+  width:20vh;
+  height: 6.5vh;
+  border:2px solid white;
+}
+
+
+.gronksBox h2{
+  padding-left:7vh;
+  margin-top: -0.0 !important;
+  color:white;
+  font-family:"Raleway-bold";
+  position: absolute;
+  letter-spacing: 1.5px;
+}
+
+.extracreditBox{
+  width: 20vh;
+  height: 6.5vh;
+  border: 2px solid white;
+}
+
+.extracreditBox h2{
+  padding-left: 6vh;
+  margin-top: -0.0vh;
+  color: white;
+  font-family:"Raleway-bold";
+  letter-spacing:1.5px;
+}
+
+.assignmentsTitle p{
+  font-family: "Roboto";
+  font-size:2vh;
+  color: #707070;
+  letter-spacing: 1.5px;
+  padding-top: 5vh;
+  padding-left: 2vh;
+}
+
+.firstButton button{
+  background-color:#61E294;
+  color:#ffffff;
+  height: 12vh;
+  width: 27vh;
+  font-family: "Raleway-regular";
+  font-size: 1.5vh;
+  margin-right:18vh;
+}
+
+.firstButton p{
+  margin-bottom: 0.5vh;
+  letter-spacing: 1.5px;
+}
+
+.firstButton h1{
+  font-family: "Roboto";
+}
+
+.secondButton button{
+  background-color:#61E294;
+  color:#ffffff;
+  height: 12vh;
+  width: 27vh;
+  font-family: "Raleway-regular";
+  font-size: 1.5vh;
+  margin-right: 18vh;
+}
+
+.secondButton p{
+  margin-bottom: 0.5vh;
+  letter-spacing: 1.5px;
+}
+
+.secondButton h1{
+  font-family: "Roboto";
+}
+
+.thirdButton button{
+  background-color:#61E294;
+  color:#ffffff;
+  height: 12vh;
+  width: 27vh;
+  font-family: "Raleway-regular";
+  font-size: 1.5vh;
+}
+
+.thirdButton p{
+  margin-bottom: 0.5vh;
+  letter-spacing: 1.5px;
+}
+
+.thirdButton h1{
+  font-family: "Roboto";
+}
+
+.nextButton a{
+  font-size: 8vh;
+  color: grey;
+  float: right;
+  padding-left:8vh;
+}
+
+.activeAssignments p{
+  font-family: "Roboto";
+  font-size:2vh;
+  color: #707070;
+  letter-spacing: 1.5px;
+}
+
+.homework h2{
+  font-family: "Raleway-bold";
+  font-size:6vh;
+  color: #707070;
+  letter-spacing: 1.5px;
+}
+
+.dueDate h4{
+  font-family: "Roboto";
+  color: #707070;
+}
+
+.seeDetails button{
+  background-color:#2CEAA3;
+  color:#ffffff;
+  height: 9vh;
+  width: 35vh;
+  font-family: "Roboto";
+  letter-spacing: 3.5px;
+  font-size: 1.5vh;
+}
+
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+  .assignmentsImage {
+    display:none;
+  }
+}
+
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+  .topGraph{
+    display:none;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .assignmentsImage {
+    display: none;
+  }
+}
+.assignmentsImage{
+    width: 60vh;
+    align: center;
+    margin-top:-10vh;
+    margin-left:10vh;
+}
+
+@media only screen and (max-width: 1150px) {
+  .topGraph {
+    display: none;
+  }
+}
+
+.topGraph{
+      width: 85vh;
+      align: center;
+      margin-top:-3vh;
+      margin-right:15vh;
+  }
+
+}
+
+.firstButton button{
+  background-color:#61E294;
+  color:#ffffff;
+  height: 12vh;
+  width: 27vh;
+  font-family: "Raleway-regular";
+  font-size: 1.5vh;
+  margin-right:18vh;
+}
+
+.firstButton p{
+  margin-bottom: 0.5vh;
+  letter-spacing: 1.5px;
+}
+
+.firstButton h1{
+  font-family: "Roboto";
+}
+
+.secondButton button{
+  background-color:#61E294;
+  color:#ffffff;
+  height: 12vh;
+  width: 27vh;
+  font-family: "Raleway-regular";
+  font-size: 1.5vh;
+  margin-right: 18vh;
+}
+
+.secondButton p{
+  margin-bottom: 0.5vh;
+  letter-spacing: 1.5px;
+}
+
+.secondButton h1{
+  font-family: "Roboto";
+}
+
+.thirdButton button{
+  background-color:#61E294;
+  color:#ffffff;
+  height: 12vh;
+  width: 27vh;
+  font-family: "Raleway-regular";
+  font-size: 1.5vh;
+}
+
+.thirdButton p{
+  margin-bottom: 0.5vh;
+  letter-spacing: 1.5px;
+}
+
+.thirdButton h1{
+  font-family: "Roboto";
+}
+
+.carousel-inner .active.left {
+  left: -35%;
+}
+.carousel-inner .next {
+  left: 35%;
+}
+.carousel-inner .prev {
+  left: -35%;
+}
+.carousel-control.left,
+.carousel-control.right {
+  background-image: none;
+}
+.carousel-multi .carousel-inner > .item {
+  transition: 0ms ease-in-out left;
+}
+.carousel-multi .carousel-inner > .item > .media-card {
+
+  border-right: 20px solid #fff;
+  display: table-cell;
+  width: 1%;
+}
+.carousel-multi .carousel-inner > .item > .media-card:last-of-type {
+  border-right: none;
+}
+.carousel-multi .carousel-inner .active {
+  display: table;
+}
+.carousel-multi .carousel-inner .active.left {
+  left: -35%;
+}
+.carousel-multi .carousel-inner .active.right {
+  left: 35%;
+}
+.carousel-multi .carousel-inner .next {
+  left: 35%;
+}
+.carousel-multi .carousel-inner .prev {
+  left: -35%;
+}
+
+
+#rightClick{
+  color: grey;
+}
+
+#carousel-example-multi{
+  padding-left:15vh;
+}
+
+@media screen and (max-width: 800px){
+  .item{
+    display: none;
+  }
+}
