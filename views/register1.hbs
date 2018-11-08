@@ -1,0 +1,49 @@
+
+<link rel='stylesheet' href='/stylesheets/style.css' />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link href='https://fonts.googleapis.com/css?family=Raleway:600' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Raleway:100' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="/stylesheets/simple-sidebar.css">
+<link rel='stylesheet' href='/stylesheets/register1.css' />
+{{#if error}}
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+      {{error}}
+    </div>
+{{/if}}
+
+<body>
+  <div class="registerBack">
+    <img src="img/pie-graph.png" />
+      <h1>Classroom Markets</h1>
+    <div class="container-fluid steps">
+      <div class="row">
+        <div class="col-md-6">
+          <center>
+          <h5>E-mail Address</h5>
+          </center>
+          <hr/>
+        </div>
+        <div class="col-md-6 deets">
+          <center>
+          <h5>Profile Details</h5>
+          </center>
+        </div>
+      </div>
+    </div>
+    <h3 class="questionOne">Are you a student or professor?</h3>
+    <form action="" class="oneOptions">
+      <input type="radio" name="profession" value="Student"> Student<br>
+      <input type="radio" name="profession" value="Professor"> Professor<br>
+    </form>
+    <h3 class="questionTwo">Enter your e-mail address:</h3>
+    <form class="enterEmail">
+      <div class="form-group">
+        <input type="email" class="form-control" id="InputEmail" placeholder="E-mail Address">
+      </div>
+    </form>
+    <a href="/register2.html"><button type="button" class="nextButton">NEXT</button></a>
+  </div>
+</body>

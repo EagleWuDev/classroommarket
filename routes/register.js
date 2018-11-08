@@ -16,6 +16,11 @@ router.get('/register', function(req, res) {
   res.render('register');
 });
 
+// GET REDESIGNED registration page
+router.get('/register1', function(req, res) {
+  res.render('register1');
+});
+
 // POST registration page
 var validateReq = function(userData) {
   return (userData.firstName && userData.lastName && userData.password && userData.email && userData.profession &&
